@@ -15,7 +15,7 @@
   - Write unit tests for database operations with mock Firestore
   - _Requirements: 1.5, 5.3, 7.2_
 
-- [ ] 3. Build configuration management API routes
+- [x] 3. Build configuration management API routes
   - Implement POST /api/configurations endpoint to create new scraping configurations
   - Implement GET /api/configurations endpoint to list all active configurations
   - Implement PUT /api/configurations/[id] endpoint to update existing configurations
