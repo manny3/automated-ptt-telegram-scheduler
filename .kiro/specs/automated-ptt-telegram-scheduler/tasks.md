@@ -33,7 +33,7 @@
   - Write component tests for form interactions and validation
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.6_
 
-- [ ] 5. Build configuration list and dashboard components
+- [x] 5. Build configuration list and dashboard components
   - Create ConfigurationList component to display all active configurations in a table
   - Implement Dashboard component showing execution status and last run times
   - Add edit and delete functionality for existing configurations
