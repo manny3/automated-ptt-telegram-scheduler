@@ -1,0 +1,118 @@
+# Cloud Run 服務配置
+# 此檔案定義了 PTT Telegram Scheduler 在 Cloud Run 上的部署配置
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ptt-telegram-scheduler
+  labels:
+    app: ptt-telegram-scheduler
+    version: "1.0.0"
+    environment: production
+  annotations:
+    # Cloud Run 特定註解
+    run.googleapis.com/ingress: all
+    run.googleapis.com/execution-environment: gen2
+    # 自動縮放設定
+    autoscaling.knative.dev/minScale: "0"
+    autoscaling.knative.dev/maxScale: "10"
+    # CPU 分配
+    run.googleapis.com/cpu-throttling: "true"
+spec:
+  template:
+    metadata:
+      labels:
+        app: ptt-telegram-scheduler
+        version: "1.0.0"
+      annotations:
+        # 資源限制
+        run.googleapis.com/memory: "512Mi"
+        run.googleapis.com/cpu: "1000m"
+        # 並發設定
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/execution-environment: gen2
+        # 逾時設定
+        run.googleapis.com/timeout: "300s"
+    spec:
+      # 服務帳戶
+      serviceAccountName: ptt-scheduler-sa@PROJECT_ID.iam.gserviceaccount.com
+      
+      # 容器設定
+      containers:
+      - name: ptt-telegram-scheduler
+        image: gcr.io/PROJECT_ID/ptt-telegram-scheduler:latest
+        
+        # 端口設定
+        ports:
+        - name: http1
+          containerPort: 3000
+          protocol: TCP
+        
+        # 環境變數
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3000"
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "PROJECT_ID"
+        - name: TELEGRAM_BOT_TOKEN_SECRET_NAME
+          value: "telegram-bot-token"
+        
+        # 資源限制
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+        
+        # 健康檢查
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+            httpHeaders:
+            - name: User-Agent
+              value: "Cloud-Run-Health-Check"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+            httpHeaders:
+            - name: User-Agent
+              value: "Cloud-Run-Readiness-Check"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        
+        # 啟動探測
+        startupProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 10
+          successThreshold: 1
+      
+      # 並發設定
+      containerConcurrency: 100
+      
+      # 逾時設定
+      timeoutSeconds: 300
+  
+  # 流量設定
+  traffic:
+  - percent: 100
+    latestRevision: true

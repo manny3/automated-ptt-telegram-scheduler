@@ -78,14 +78,19 @@ def get_telegram_bot_token() -> str:
 def is_configuration_due(config: Dict[str, Any]) -> bool:
     """Check if a configuration is due for execution based on its schedule"""
     try:
+        config_id = config.get('id', 'unknown')
+        config_name = config.get('name', 'Unknown')
         schedule = config.get('schedule', {})
         schedule_type = schedule.get('type')
         last_executed = config.get('lastExecuted')
         
         now = datetime.utcnow()
         
+        logger.info(f"Checking schedule for config '{config_name}' ({config_id}): type={schedule_type}")
+        
         # If never executed, it's due
         if not last_executed:
+            logger.info(f"Config '{config_name}' has never been executed - marking as due")
             return True
         
         # Convert Firestore timestamp to datetime if needed
@@ -94,29 +99,108 @@ def is_configuration_due(config: Dict[str, Any]) -> bool:
         elif isinstance(last_executed, str):
             last_executed = datetime.fromisoformat(last_executed.replace('Z', '+00:00'))
         
+        logger.info(f"Config '{config_name}' last executed: {last_executed}, current time: {now}")
+        
         if schedule_type == 'hourly':
-            return now >= last_executed + timedelta(hours=1)
+            next_due = last_executed + timedelta(hours=1)
+            is_due = now >= next_due
+            logger.info(f"Hourly schedule - next due: {next_due}, is due: {is_due}")
+            return is_due
+            
         elif schedule_type == 'daily':
             # For daily schedules, check if it's past the scheduled time
             scheduled_time = schedule.get('time', '09:00')  # Default to 9 AM
-            hour, minute = map(int, scheduled_time.split(':'))
+            try:
+                hour, minute = map(int, scheduled_time.split(':'))
+            except (ValueError, AttributeError):
+                logger.warning(f"Invalid scheduled time format '{scheduled_time}', using 09:00")
+                hour, minute = 9, 0
             
             # Get today's scheduled time
             today_scheduled = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
             
             # If we haven't executed today and it's past the scheduled time
-            if last_executed.date() < now.date() and now >= today_scheduled:
-                return True
+            is_due = last_executed.date() < now.date() and now >= today_scheduled
             
-            return False
+            logger.info(f"Daily schedule at {scheduled_time} - today's scheduled time: {today_scheduled}")
+            logger.info(f"Last executed date: {last_executed.date()}, current date: {now.date()}")
+            logger.info(f"Is past scheduled time today: {now >= today_scheduled}, is due: {is_due}")
+            
+            return is_due
+            
         elif schedule_type == 'custom':
             interval_minutes = schedule.get('interval', 60)  # Default to 60 minutes
-            return now >= last_executed + timedelta(minutes=interval_minutes)
+            next_due = last_executed + timedelta(minutes=interval_minutes)
+            is_due = now >= next_due
+            
+            logger.info(f"Custom schedule - interval: {interval_minutes} minutes, next due: {next_due}, is due: {is_due}")
+            return is_due
         
-        return False
+        else:
+            logger.warning(f"Unknown schedule type '{schedule_type}' for config '{config_name}' - marking as not due")
+            return False
+            
     except Exception as e:
         logger.error(f"Error checking if configuration is due: {e}")
         return False
+
+
+def log_scheduler_trigger():
+    """Log information about the scheduler trigger"""
+    try:
+        trigger_time = datetime.utcnow()
+        logger.info(f"=== Cloud Scheduler Trigger at {trigger_time} ===")
+        
+        # Log environment information
+        project_id = os.environ.get('GOOGLE_CLOUD_PROJECT', 'unknown')
+        function_name = os.environ.get('FUNCTION_NAME', 'unknown')
+        function_region = os.environ.get('FUNCTION_REGION', 'unknown')
+        
+        logger.info(f"Project: {project_id}")
+        logger.info(f"Function: {function_name}")
+        logger.info(f"Region: {function_region}")
+        
+        # Log execution context
+        logger.info(f"Execution ID: {os.environ.get('FUNCTION_EXECUTION_ID', 'unknown')}")
+        
+    except Exception as e:
+        logger.warning(f"Failed to log scheduler trigger info: {e}")
+
+
+def calculate_next_execution_time(config: Dict[str, Any]) -> Optional[datetime]:
+    """Calculate the next execution time for a configuration"""
+    try:
+        schedule = config.get('schedule', {})
+        schedule_type = schedule.get('type')
+        now = datetime.utcnow()
+        
+        if schedule_type == 'hourly':
+            # Next hour
+            return now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+            
+        elif schedule_type == 'daily':
+            scheduled_time = schedule.get('time', '09:00')
+            try:
+                hour, minute = map(int, scheduled_time.split(':'))
+            except (ValueError, AttributeError):
+                hour, minute = 9, 0
+            
+            # Next occurrence of the scheduled time
+            next_execution = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+            if next_execution <= now:
+                next_execution += timedelta(days=1)
+            
+            return next_execution
+            
+        elif schedule_type == 'custom':
+            interval_minutes = schedule.get('interval', 60)
+            return now + timedelta(minutes=interval_minutes)
+        
+        return None
+        
+    except Exception as e:
+        logger.error(f"Error calculating next execution time: {e}")
+        return None
 
 
 def scrape_ptt_articles(board_name: str, post_count: int, keywords: List[str]) -> List[Dict[str, Any]]:
@@ -379,6 +463,9 @@ def main(request: Request) -> Dict[str, Any]:
     execution_results = []
     
     try:
+        # Log scheduler trigger information
+        log_scheduler_trigger()
+        
         logger.info("Starting PTT scraping scheduler execution")
         
         # Get Telegram bot token from Secret Manager

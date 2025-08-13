@@ -86,7 +86,7 @@
   - Write tests for secret retrieval with mock Secret Manager responses
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 10. Configure Cloud Scheduler for periodic task execution
+- [x] 10. Configure Cloud Scheduler for periodic task execution
 
   - Create Cloud Scheduler job to trigger Cloud Function every 15 minutes
   - Configure job to call Cloud Function HTTP endpoint with empty payload
@@ -95,7 +95,7 @@
   - Add logging for scheduler triggers and execution timing
   - _Requirements: 2.1, 6.4_
 
-- [ ] 11. Create deployment configurations and Docker setup
+- [x] 11. Create deployment configurations and Docker setup
 
   - Create Dockerfile for Next.js application with multi-stage build
   - Configure Cloud Run deployment with proper resource limits and scaling settings

@@ -1,17 +1,112 @@
-Dockerfile
-.dockerignore
+# Docker ignore 檔案
+# 排除不需要複製到 Docker 映像中的檔案和目錄
+
+# 依賴目錄
 node_modules
-npm-debug.log
-README.md
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js 建構輸出
+.next/
+out/
+
+# 生產建構
+build/
+dist/
+
+# 環境變數檔案
 .env
 .env.local
+.env.development.local
+.env.test.local
 .env.production.local
-.env.staging.local
-.git
-.gitignore
-.next
-.vercel
-coverage
-.nyc_output
+
+# 日誌檔案
+*.log
+logs/
+
+# 執行時檔案
+*.pid
+*.seed
+*.pid.lock
+
+# 覆蓋率報告
+coverage/
+.nyc_output/
+
+# 測試檔案
+**/*.test.js
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.js
+**/*.spec.ts
+**/*.spec.tsx
+__tests__/
+test/
+tests/
+
+# IDE 和編輯器檔案
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 作業系統檔案
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git 相關
+.git/
+.gitignore
+.gitattributes
+
+# 文件
+README.md
+CHANGELOG.md
+LICENSE
+*.md
+
+# 配置檔案
+.eslintrc*
+.prettierrc*
+jest.config.*
+tsconfig.json
+next.config.js
+
+# 部署相關
+Dockerfile*
+docker-compose*
+.dockerignore
+deployment/
+scripts/
+docs/
+
+# 備份檔案
+backup/
+*.backup
+*.bak
+
+# 暫存檔案
+tmp/
+temp/
+.tmp/
+
+# 開發工具
+.storybook/
+storybook-static/
+
+# 效能分析
+.next/analyze/
+
+# Vercel
+.vercel/
+
+# 其他
+.kiro/

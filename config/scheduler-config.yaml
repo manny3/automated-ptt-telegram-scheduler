@@ -1,0 +1,146 @@
+# Cloud Scheduler 配置範本
+# 此檔案定義了 PTT Telegram Scheduler 的 Cloud Scheduler 工作配置
+
+# 基本設定
+project_id: "your-project-id"
+region: "us-central1"
+timezone: "Asia/Taipei"
+
+# Scheduler 工作設定
+scheduler_jobs:
+  # 主要的 PTT 抓取工作
+  - name: "ptt-telegram-scheduler"
+    description: "定期觸發 PTT 文章抓取和 Telegram 傳送任務"
+    schedule: "*/15 * * * *"  # 每 15 分鐘執行一次
+    target:
+      type: "http"
+      uri: "https://us-central1-your-project-id.cloudfunctions.net/ptt-scraper"
+      http_method: "POST"
+      headers:
+        Content-Type: "application/json"
+      body: "{}"
+    retry_config:
+      retry_count: 3
+      max_retry_duration: "300s"
+      min_backoff_duration: "5s"
+      max_backoff_duration: "60s"
+    
+  # 備用工作（可選）- 每小時執行一次，用於處理失敗的任務
+  - name: "ptt-telegram-scheduler-backup"
+    description: "備用 PTT 抓取工作，處理失敗的任務"
+    schedule: "0 * * * *"  # 每小時執行一次
+    target:
+      type: "http"
+      uri: "https://us-central1-your-project-id.cloudfunctions.net/ptt-scraper"
+      http_method: "POST"
+      headers:
+        Content-Type: "application/json"
+      body: '{"backup_mode": true}'
+    retry_config:
+      retry_count: 2
+      max_retry_duration: "180s"
+      min_backoff_duration: "10s"
+      max_backoff_duration: "120s"
+    enabled: false  # 預設停用
+
+# 常用排程範例
+schedule_examples:
+  every_15_minutes: "*/15 * * * *"
+  every_30_minutes: "*/30 * * * *"
+  every_hour: "0 * * * *"
+  every_2_hours: "0 */2 * * *"
+  daily_9am: "0 9 * * *"
+  daily_9am_6pm: "0 9,18 * * *"
+  weekdays_9am: "0 9 * * 1-5"
+  weekends_10am: "0 10 * * 6,7"
+  monthly_1st_9am: "0 9 1 * *"
+  
+# 時區選項
+timezone_options:
+  taipei: "Asia/Taipei"
+  tokyo: "Asia/Tokyo"
+  shanghai: "Asia/Shanghai"
+  utc: "UTC"
+  pst: "America/Los_Angeles"
+  est: "America/New_York"
+
+# IAM 設定
+iam_settings:
+  # Cloud Scheduler 服務帳戶需要的權限
+  scheduler_service_account: "service-{PROJECT_NUMBER}@gcp-sa-cloudscheduler.iam.gserviceaccount.com"
+  required_roles:
+    - "roles/cloudfunctions.invoker"
+  
+  # 自訂服務帳戶（可選）
+  custom_service_account:
+    email: "ptt-scheduler@your-project-id.iam.gserviceaccount.com"
+    roles:
+      - "roles/cloudfunctions.invoker"
+      - "roles/secretmanager.secretAccessor"
+
+# 監控和警報設定
+monitoring:
+  # 日誌保留期間
+  log_retention_days: 30
+  
+  # 警報條件
+  alerts:
+    - name: "scheduler-job-failures"
+      condition: "連續 3 次執行失敗"
+      notification_channels: []
+    
+    - name: "function-execution-errors"
+      condition: "5 分鐘內超過 5 個錯誤"
+      notification_channels: []
+
+# 環境變數
+environment_variables:
+  GOOGLE_CLOUD_PROJECT: "your-project-id"
+  TELEGRAM_BOT_TOKEN_SECRET_NAME: "telegram-bot-token"
+  REGION: "us-central1"
+
+# 部署設定
+deployment:
+  # 是否在部署時自動啟用工作
+  auto_enable: true
+  
+  # 部署後是否執行測試
+  run_test_after_deploy: true
+  
+  # 備份現有設定
+  backup_existing_config: true
+
+# 開發和測試設定
+development:
+  # 開發環境的排程（更頻繁的測試）
+  dev_schedule: "*/5 * * * *"  # 每 5 分鐘
+  
+  # 測試模式設定
+  test_mode:
+    enabled: false
+    dry_run: true
+    mock_telegram: true
+    
+# 生產環境設定
+production:
+  # 生產環境的排程
+  prod_schedule: "*/15 * * * *"  # 每 15 分鐘
+  
+  # 效能設定
+  performance:
+    max_concurrent_executions: 1
+    timeout: "540s"
+    memory: "512MB"
+
+# 故障恢復設定
+disaster_recovery:
+  # 備用地區
+  backup_regions:
+    - "us-east1"
+    - "asia-east1"
+  
+  # 自動故障轉移
+  auto_failover: false
+  
+  # 備份頻率
+  backup_frequency: "daily"

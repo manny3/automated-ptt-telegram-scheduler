@@ -1,59 +1,69 @@
-# Use the official Node.js runtime as the base image
-FROM node:18-alpine AS base
+# PTT Telegram Scheduler - Next.js Application Dockerfile
+# 多階段建構，最佳化映像大小和安全性
 
-# Install dependencies only when needed
-FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+# 階段 1: 依賴安裝
+FROM node:18-alpine AS deps
 RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# 複製 package 檔案
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
 
-# Rebuild the source code only when needed
-FROM base AS builder
+# 安裝依賴
+RUN npm ci --only=production && npm cache clean --force
+
+# 階段 2: 建構應用程式
+FROM node:18-alpine AS builder
 WORKDIR /app
+
+# 複製依賴
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
+# 設定建構時環境變數
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV production
 
+# 建構應用程式
 RUN npm run build
 
-# Production image, copy all the files and run next
-FROM base AS runner
+# 階段 3: 生產執行環境
+FROM node:18-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-ENV NEXT_TELEMETRY_DISABLED 1
-
+# 建立非 root 使用者
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# 設定執行時環境變數
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# 複製必要檔案
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
+# 複製建構輸出
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# 安裝生產依賴
+COPY --from=deps /app/node_modules ./node_modules
+
+# 切換到非 root 使用者
 USER nextjs
 
+# 暴露端口
 EXPOSE 3000
 
+# 設定環境變數
 ENV PORT 3000
-# set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
+# 健康檢查
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node healthcheck.js || exit 1
+
+# 啟動應用程式
 CMD ["node", "server.js"]

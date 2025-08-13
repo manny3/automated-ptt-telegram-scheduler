@@ -1,0 +1,145 @@
+# Docker Compose 配置
+# 用於本地開發和測試環境
+
+version: '3.8'
+
+services:
+  # Next.js 應用程式
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
+      - TELEGRAM_BOT_TOKEN_SECRET_NAME=${TELEGRAM_BOT_TOKEN_SECRET_NAME:-telegram-bot-token}
+      - FIRESTORE_EMULATOR_HOST=firestore:8080
+    volumes:
+      # 開發時掛載原始碼
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - firestore
+    networks:
+      - ptt-scheduler-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Firestore 模擬器
+  firestore:
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+    ports:
+      - "8080:8080"
+      - "4000:4000"
+    environment:
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
+    command: >
+      sh -c "
+        gcloud config set project ${GOOGLE_CLOUD_PROJECT} &&
+        gcloud emulators firestore start --host-port=0.0.0.0:8080
+      "
+    volumes:
+      - firestore-data:/opt/data
+    networks:
+      - ptt-scheduler-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Redis (用於快取和會話管理)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - ptt-scheduler-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    command: redis-server --appendonly yes
+
+  # Nginx 反向代理 (可選)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deployment/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deployment/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - web
+    networks:
+      - ptt-scheduler-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+  # 監控和日誌 (可選)
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deployment/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - ptt-scheduler-network
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./deployment/grafana:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    networks:
+      - ptt-scheduler-network
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+# 網路配置
+networks:
+  ptt-scheduler-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# 資料卷配置
+volumes:
+  firestore-data:
+    driver: local
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

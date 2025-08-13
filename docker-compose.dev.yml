@@ -1,0 +1,89 @@
+# Docker Compose 開發環境配置
+# 專為本地開發最佳化
+
+version: '3.8'
+
+services:
+  # Next.js 開發伺服器
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+      - "9229:9229"  # Node.js 除錯端口
+    environment:
+      - NODE_ENV=development
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT:-ptt-scheduler-dev}
+      - TELEGRAM_BOT_TOKEN_SECRET_NAME=${TELEGRAM_BOT_TOKEN_SECRET_NAME:-telegram-bot-token-dev}
+      - FIRESTORE_EMULATOR_HOST=firestore-dev:8080
+      - REDIS_URL=redis://redis-dev:6379
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      # 熱重載支援
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - firestore-dev
+      - redis-dev
+    networks:
+      - ptt-scheduler-dev
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # Firestore 模擬器 (開發版)
+  firestore-dev:
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+    ports:
+      - "8080:8080"
+      - "4000:4000"  # Firestore UI
+    environment:
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT:-ptt-scheduler-dev}
+    command: >
+      sh -c "
+        gcloud config set project ${GOOGLE_CLOUD_PROJECT:-ptt-scheduler-dev} &&
+        gcloud emulators firestore start --host-port=0.0.0.0:8080
+      "
+    volumes:
+      - firestore-dev-data:/opt/data
+    networks:
+      - ptt-scheduler-dev
+    restart: unless-stopped
+
+  # Redis 開發版
+  redis-dev:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-dev-data:/data
+    networks:
+      - ptt-scheduler-dev
+    restart: unless-stopped
+    command: redis-server --appendonly yes --save 60 1
+
+  # 開發工具容器
+  dev-tools:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    networks:
+      - ptt-scheduler-dev
+    profiles:
+      - tools
+    command: tail -f /dev/null
+
+# 網路配置
+networks:
+  ptt-scheduler-dev:
+    driver: bridge
+
+# 資料卷配置
+volumes:
+  firestore-dev-data:
+    driver: local
+  redis-dev-data:
+    driver: local
