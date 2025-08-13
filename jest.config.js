@@ -6,12 +6,12 @@ const createJestConfig = nextJest({
 
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node', // Default to node environment
   testMatch: [
     '**/__tests__/**/*.test.ts',
     '**/__tests__/**/*.test.tsx',
   ],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   collectCoverageFrom: [
@@ -21,6 +21,13 @@ const customJestConfig = {
   ],
   testEnvironmentOptions: {
     customExportConditions: [''],
+  },
+  // Override test environment for specific files
+  testEnvironment: 'node',
+  globals: {
+    'ts-jest': {
+      useESM: false,
+    },
   },
 }
 

@@ -1,6 +1,7 @@
 # Implementation Plan
 
 - [x] 1. Set up Next.js project structure and core dependencies
+
   - Create Next.js project with TypeScript configuration
   - Install required dependencies: @google-cloud/firestore, @google-cloud/secret-manager, tailwindcss
   - Set up project directory structure for components, pages, and API routes
@@ -8,6 +9,7 @@
   - _Requirements: 1.1, 6.1, 6.3_
 
 - [x] 2. Implement Firestore database models and utilities
+
   - Create TypeScript interfaces for ScrapingConfiguration and ExecutionResult data models
   - Implement Firestore connection utilities and database client initialization
   - Create CRUD operations for configurations collection (create, read, update, delete)
@@ -16,6 +18,7 @@
   - _Requirements: 1.5, 5.3, 7.2_
 
 - [x] 3. Build configuration management API routes
+
   - Implement POST /api/configurations endpoint to create new scraping configurations
   - Implement GET /api/configurations endpoint to list all active configurations
   - Implement PUT /api/configurations/[id] endpoint to update existing configurations
@@ -25,6 +28,7 @@
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 5.4, 5.5_
 
 - [x] 4. Create configuration form UI components
+
   - Build ConfigurationForm component with form fields for name, PTT board, keywords, post count
   - Implement schedule configuration UI with options for hourly, daily, and custom intervals
   - Add Telegram chat ID input field with validation
@@ -34,6 +38,7 @@
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.6_
 
 - [x] 5. Build configuration list and dashboard components
+
   - Create ConfigurationList component to display all active configurations in a table
   - Implement Dashboard component showing execution status and last run times
   - Add edit and delete functionality for existing configurations
@@ -42,7 +47,8 @@
   - Write component tests for list operations and status display
   - _Requirements: 5.4, 5.5, 7.1, 7.5, 7.6_
 
-- [ ] 6. Extract and adapt PTT scraping logic from existing project
+- [x] 6. Extract and adapt PTT scraping logic from existing project
+
   - Copy search_ptt_posts method from ptt-article-finder/main.py
   - Adapt cloudscraper configuration for Cloud Functions environment
   - Implement PTTArticle dataclass and article filtering by keywords
@@ -52,6 +58,7 @@
   - _Requirements: 2.3, 2.4, 2.5_
 
 - [ ] 7. Implement Telegram Bot integration
+
   - Create TelegramBot class with send_message and send_article_batch methods
   - Implement article formatting for Telegram messages with title, author, and PTT link
   - Add message splitting logic for long content and multiple articles
@@ -61,6 +68,7 @@
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
 - [ ] 8. Build Cloud Function for scheduled scraping tasks
+
   - Create main Cloud Function entry point that queries Firestore for active configurations
   - Implement execute_scraping_job function that processes individual configurations
   - Integrate PTT scraping logic with Telegram delivery in the function
@@ -70,6 +78,7 @@
   - _Requirements: 2.1, 2.2, 4.1, 4.3, 4.4, 7.2, 7.3_
 
 - [ ] 9. Set up Secret Manager for secure token storage
+
   - Create Secret Manager secret for Telegram Bot token storage
   - Implement secure token retrieval in Cloud Function using proper IAM authentication
   - Add error handling for Secret Manager access failures
@@ -78,6 +87,7 @@
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
 - [ ] 10. Configure Cloud Scheduler for periodic task execution
+
   - Create Cloud Scheduler job to trigger Cloud Function every 15 minutes
   - Configure job to call Cloud Function HTTP endpoint with empty payload
   - Set up proper IAM permissions for Cloud Scheduler to invoke Cloud Function
@@ -86,6 +96,7 @@
   - _Requirements: 2.1, 6.4_
 
 - [ ] 11. Create deployment configurations and Docker setup
+
   - Create Dockerfile for Next.js application with multi-stage build
   - Configure Cloud Run deployment with proper resource limits and scaling settings
   - Set up Cloud Function deployment configuration with Python runtime
@@ -94,6 +105,7 @@
   - _Requirements: 6.1, 6.2, 6.5, 6.6_
 
 - [ ] 12. Implement comprehensive error handling and logging
+
   - Add structured logging throughout Next.js application and Cloud Function
   - Implement error boundaries in React components for graceful error handling
   - Add database error handling with retry logic for Firestore operations
@@ -103,6 +115,7 @@
   - _Requirements: 2.5, 3.5, 3.6, 7.3, 7.5_
 
 - [ ] 13. Set up execution history and monitoring dashboard
+
   - Implement GET /api/executions/[configId] endpoint to retrieve execution history
   - Create TaskHistory component to display detailed execution logs
   - Add execution metrics display including articles found, sent, and error messages
