@@ -57,7 +57,7 @@
   - Write unit tests for PTT scraping with mock responses
   - _Requirements: 2.3, 2.4, 2.5_
 
-- [ ] 7. Implement Telegram Bot integration
+- [x] 7. Implement Telegram Bot integration
 
   - Create TelegramBot class with send_message and send_article_batch methods
   - Implement article formatting for Telegram messages with title, author, and PTT link
