@@ -1,34 +1,159 @@
 const nextJest = require('next/jest')
 
 const createJestConfig = nextJest({
+  // Provide the path to your Next.js app to load next.config.js and .env files
   dir: './',
 })
 
+// Add any custom config to be passed to Jest
 const customJestConfig = {
+  // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testEnvironment: 'node', // Default to node environment
-  testMatch: [
-    '**/__tests__/**/*.test.ts',
-    '**/__tests__/**/*.test.tsx',
-  ],
+  
+  // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
+  moduleDirectories: ['node_modules', '<rootDir>/'],
+  
+  // Module name mapping for path aliases
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@/components/(.*)$': '<rootDir>/src/components/$1',
+    '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
+    '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
+    '^@/styles/(.*)$': '<rootDir>/src/styles/$1',
+    '^@/types/(.*)$': '<rootDir>/src/types/$1',
+    '^@/middleware/(.*)$': '<rootDir>/src/middleware/$1',
   },
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/**/__tests__/**',
+  
+  // Test environment
+  testEnvironment: 'jest-environment-jsdom',
+  
+  // Test patterns
+  testMatch: [
+    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
+    '<rootDir>/src/**/*.{test,spec}.{js,jsx,ts,tsx}',
   ],
-  testEnvironmentOptions: {
-    customExportConditions: [''],
-  },
-  // Override test environment for specific files
-  testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
-      useESM: false,
+  
+  // Coverage configuration
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/pages/_app.tsx',
+    '!src/pages/_document.tsx',
+    '!src/pages/api/**/*.ts', // API routes tested separately
+    '!src/**/*.stories.{js,jsx,ts,tsx}',
+    '!src/**/*.config.{js,jsx,ts,tsx}',
+    '!src/types/**/*.ts',
+  ],
+  
+  coverageReporters: [
+    'text',
+    'lcov',
+    'html',
+    'json-summary',
+  ],
+  
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
     },
   },
+  
+  // Test timeout
+  testTimeout: 10000,
+  
+  // Transform configuration
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+  },
+  
+  // Module file extensions
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  
+  // Ignore patterns
+  testPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/build/',
+    '<rootDir>/dist/',
+  ],
+  
+  // Transform ignore patterns
+  transformIgnorePatterns: [
+    '/node_modules/',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ],
+  
+  // Global setup and teardown
+  globalSetup: '<rootDir>/jest.global-setup.js',
+  globalTeardown: '<rootDir>/jest.global-teardown.js',
+  
+  // Test projects for different test types
+  projects: [
+    {
+      displayName: 'unit',
+      testMatch: [
+        '<rootDir>/src/**/__tests__/**/*.test.{js,jsx,ts,tsx}',
+        '<rootDir>/src/**/?(*.)(test).{js,jsx,ts,tsx}',
+      ],
+      testPathIgnorePatterns: [
+        '<rootDir>/src/__tests__/integration/',
+        '<rootDir>/src/__tests__/e2e/',
+        '<rootDir>/src/__tests__/performance/',
+      ],
+    },
+    {
+      displayName: 'integration',
+      testMatch: ['<rootDir>/src/__tests__/integration/**/*.test.{js,jsx,ts,tsx}'],
+      testTimeout: 30000,
+    },
+    {
+      displayName: 'e2e',
+      testMatch: ['<rootDir>/src/__tests__/e2e/**/*.test.{js,jsx,ts,tsx}'],
+      testTimeout: 60000,
+    },
+    {
+      displayName: 'performance',
+      testMatch: ['<rootDir>/src/__tests__/performance/**/*.test.{js,jsx,ts,tsx}'],
+      testTimeout: 120000,
+    },
+  ],
+  
+  // Reporters
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'test-results',
+        outputName: 'junit.xml',
+        suiteName: 'PTT Telegram Scheduler Tests',
+      },
+    ],
+    [
+      'jest-html-reporters',
+      {
+        publicPath: 'test-results',
+        filename: 'test-report.html',
+        expand: true,
+      },
+    ],
+  ],
+  
+  // Verbose output
+  verbose: true,
+  
+  // Error handling
+  errorOnDeprecated: true,
+  
+  // Watch plugins
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+  ],
 }
 
+// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 module.exports = createJestConfig(customJestConfig)

@@ -1,0 +1,374 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+  GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Run type checking
+      run: npm run type-check
+
+    - name: Run unit tests
+      run: npm run test:unit
+      env:
+        NODE_ENV: test
+
+    - name: Run integration tests
+      run: npm run test:integration
+      env:
+        NODE_ENV: test
+
+    - name: Run E2E tests
+      run: npm run test:e2e
+      env:
+        NODE_ENV: test
+
+    - name: Run performance tests
+      run: npm run test:performance
+      env:
+        NODE_ENV: test
+
+    - name: Generate test coverage
+      run: npm run test:coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run security audit
+      run: npm audit --audit-level high
+
+    - name: Run dependency vulnerability scan
+      run: npx audit-ci --config audit-ci.json
+
+    - name: Run SAST scan
+      uses: github/super-linter@v4
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_TYPESCRIPT_ES: true
+        VALIDATE_JAVASCRIPT_ES: true
+        VALIDATE_JSON: true
+        VALIDATE_YAML: true
+        VALIDATE_DOCKERFILE: true
+
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [test, security]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build Next.js application
+      run: npm run build
+      env:
+        NODE_ENV: production
+
+    - name: Build Docker image
+      run: |
+        docker build -t ptt-telegram-scheduler:${{ github.sha }} .
+        docker tag ptt-telegram-scheduler:${{ github.sha }} ptt-telegram-scheduler:latest
+
+    - name: Test Docker image
+      run: |
+        docker run --rm -d --name test-container -p 3000:3000 ptt-telegram-scheduler:latest
+        sleep 10
+        curl -f http://localhost:3000/api/health || exit 1
+        docker stop test-container
+
+    - name: Save Docker image
+      run: docker save ptt-telegram-scheduler:${{ github.sha }} | gzip > ptt-telegram-scheduler.tar.gz
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: |
+          .next/
+          ptt-telegram-scheduler.tar.gz
+        retention-days: 7
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY_STAGING }}
+        project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}
+
+    - name: Configure Docker for GCR
+      run: gcloud auth configure-docker
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+
+    - name: Load Docker image
+      run: docker load < ptt-telegram-scheduler.tar.gz
+
+    - name: Tag and push to GCR
+      run: |
+        docker tag ptt-telegram-scheduler:${{ github.sha }} gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}/ptt-telegram-scheduler:${{ github.sha }}
+        docker tag ptt-telegram-scheduler:${{ github.sha }} gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}/ptt-telegram-scheduler:staging
+        docker push gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}/ptt-telegram-scheduler:${{ github.sha }}
+        docker push gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}/ptt-telegram-scheduler:staging
+
+    - name: Deploy to Cloud Run (Staging)
+      run: |
+        gcloud run deploy ptt-telegram-scheduler-staging \
+          --image gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}/ptt-telegram-scheduler:${{ github.sha }} \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --set-env-vars NODE_ENV=staging \
+          --set-env-vars GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}
+
+    - name: Deploy Cloud Function (Staging)
+      run: |
+        gcloud functions deploy ptt-scraper-staging \
+          --source functions/ptt-scraper \
+          --runtime python39 \
+          --trigger-http \
+          --allow-unauthenticated \
+          --set-env-vars GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT_STAGING }}
+
+    - name: Update Cloud Scheduler (Staging)
+      run: |
+        gcloud scheduler jobs update http ptt-scraper-job-staging \
+          --uri=$(gcloud functions describe ptt-scraper-staging --format="value(httpsTrigger.url)") \
+          --schedule="*/15 * * * *" \
+          --http-method=POST
+
+    - name: Run smoke tests
+      run: |
+        STAGING_URL=$(gcloud run services describe ptt-telegram-scheduler-staging --platform managed --region us-central1 --format "value(status.url)")
+        curl -f $STAGING_URL/api/health
+        npm run test:smoke -- --baseUrl=$STAGING_URL
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY_PRODUCTION }}
+        project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+
+    - name: Configure Docker for GCR
+      run: gcloud auth configure-docker
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+
+    - name: Load Docker image
+      run: docker load < ptt-telegram-scheduler.tar.gz
+
+    - name: Tag and push to GCR
+      run: |
+        docker tag ptt-telegram-scheduler:${{ github.sha }} gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT }}/ptt-telegram-scheduler:${{ github.sha }}
+        docker tag ptt-telegram-scheduler:${{ github.sha }} gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT }}/ptt-telegram-scheduler:latest
+        docker push gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT }}/ptt-telegram-scheduler:${{ github.sha }}
+        docker push gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT }}/ptt-telegram-scheduler:latest
+
+    - name: Deploy to Cloud Run (Production)
+      run: |
+        gcloud run deploy ptt-telegram-scheduler \
+          --image gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT }}/ptt-telegram-scheduler:${{ github.sha }} \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --set-env-vars NODE_ENV=production \
+          --set-env-vars GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }} \
+          --min-instances=1 \
+          --max-instances=10 \
+          --cpu=1 \
+          --memory=512Mi
+
+    - name: Deploy Cloud Function (Production)
+      run: |
+        gcloud functions deploy ptt-scraper \
+          --source functions/ptt-scraper \
+          --runtime python39 \
+          --trigger-http \
+          --allow-unauthenticated \
+          --set-env-vars GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }} \
+          --memory=512MB \
+          --timeout=540s
+
+    - name: Update Cloud Scheduler (Production)
+      run: |
+        gcloud scheduler jobs update http ptt-scraper-job \
+          --uri=$(gcloud functions describe ptt-scraper --format="value(httpsTrigger.url)") \
+          --schedule="*/15 * * * *" \
+          --http-method=POST \
+          --time-zone="Asia/Taipei"
+
+    - name: Run production health checks
+      run: |
+        PRODUCTION_URL=$(gcloud run services describe ptt-telegram-scheduler --platform managed --region us-central1 --format "value(status.url)")
+        curl -f $PRODUCTION_URL/api/health
+        
+        # Wait for deployment to stabilize
+        sleep 30
+        
+        # Run comprehensive health checks
+        npm run test:health-check -- --baseUrl=$PRODUCTION_URL
+
+    - name: Create GitHub release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+  notify:
+    name: Notify Deployment
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+    
+    steps:
+    - name: Notify Slack on Success
+      if: success()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: success
+        channel: '#deployments'
+        text: |
+          ✅ PTT Telegram Scheduler deployment successful!
+          Branch: ${{ github.ref }}
+          Commit: ${{ github.sha }}
+          Environment: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Notify Slack on Failure
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        channel: '#deployments'
+        text: |
+          ❌ PTT Telegram Scheduler deployment failed!
+          Branch: ${{ github.ref }}
+          Commit: ${{ github.sha }}
+          Please check the GitHub Actions logs.
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+    
+    steps:
+    - name: Cleanup old Docker images
+      run: |
+        # This would typically connect to GCR and clean up old images
+        echo "Cleanup job - would remove images older than 30 days"
+        
+    - name: Cleanup old artifacts
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const artifacts = await github.rest.actions.listArtifactsForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+          
+          const oldArtifacts = artifacts.data.artifacts.filter(artifact => {
+            const createdAt = new Date(artifact.created_at);
+            const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+            return createdAt < thirtyDaysAgo;
+          });
+          
+          for (const artifact of oldArtifacts) {
+            await github.rest.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: artifact.id,
+            });
+            console.log(`Deleted artifact: ${artifact.name}`);
+          }
