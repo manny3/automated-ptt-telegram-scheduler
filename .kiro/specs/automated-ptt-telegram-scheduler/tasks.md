@@ -67,7 +67,7 @@
   - Write unit tests for Telegram integration with mock API responses
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
-- [ ] 8. Build Cloud Function for scheduled scraping tasks
+- [x] 8. Build Cloud Function for scheduled scraping tasks
 
   - Create main Cloud Function entry point that queries Firestore for active configurations
   - Implement execute_scraping_job function that processes individual configurations
@@ -77,7 +77,7 @@
   - Write integration tests for the complete scraping and delivery flow
   - _Requirements: 2.1, 2.2, 4.1, 4.3, 4.4, 7.2, 7.3_
 
-- [ ] 9. Set up Secret Manager for secure token storage
+- [x] 9. Set up Secret Manager for secure token storage
 
   - Create Secret Manager secret for Telegram Bot token storage
   - Implement secure token retrieval in Cloud Function using proper IAM authentication
