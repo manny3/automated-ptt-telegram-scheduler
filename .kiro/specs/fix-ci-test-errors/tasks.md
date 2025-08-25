@@ -7,14 +7,14 @@
   - 驗證所有測試相關依賴與 React 19 相容
   - _Requirements: 1.1, 1.3, 4.3_
 
-- [ ] 2. 修復 Jest 配置語法錯誤
+- [x] 2. 修復 Jest 配置語法錯誤
   - 修正 jest.config.js 中 moduleNameMapper 的語法錯誤
   - 確保所有路徑映射正確結束並有適當的分隔符
   - 驗證 Jest 配置能正確解析 TypeScript 和 JSX 檔案
   - 測試模組路徑解析功能正常運作
   - _Requirements: 2.1, 2.2, 4.1_
 
-- [ ] 3. 優化 npm 依賴安裝策略
+- [x] 3. 優化 npm 依賴安裝策略
   - 更新 package-lock.json 以反映新的依賴版本
   - 在 CI 中使用 --legacy-peer-deps 標誌處理警告
   - 實施依賴安裝的錯誤處理和重試機制

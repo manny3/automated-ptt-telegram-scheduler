@@ -1,3 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="PTT Telegram Scheduler Tests" tests="0" failures="0" errors="0" time="0.774">
+<testsuites name="PTT Telegram Scheduler Tests" tests="16" failures="0" errors="0" time="0.568">
+  <testsuite name="Dashboard" errors="0" failures="0" skipped="0" timestamp="2025-08-25T16:41:38" time="0.337" tests="16">
+    <testcase classname="Dashboard Loading State should show loading skeleton when isLoading is true" name="Dashboard Loading State should show loading skeleton when isLoading is true" time="0.013">
+    </testcase>
+    <testcase classname="Dashboard Stats Display should display all stats correctly" name="Dashboard Stats Display should display all stats correctly" time="0.038">
+    </testcase>
+    <testcase classname="Dashboard Stats Display should calculate success rate correctly" name="Dashboard Stats Display should calculate success rate correctly" time="0.003">
+    </testcase>
+    <testcase classname="Dashboard Stats Display should display correct stat labels" name="Dashboard Stats Display should display correct stat labels" time="0.007">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should display recent executions correctly" name="Dashboard Recent Executions should display recent executions correctly" time="0.007">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should format execution time correctly" name="Dashboard Recent Executions should format execution time correctly" time="0.007">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should show execution duration when available" name="Dashboard Recent Executions should show execution duration when available" time="0.004">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should show empty state when no executions" name="Dashboard Recent Executions should show empty state when no executions" time="0.004">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should handle unknown configuration names" name="Dashboard Recent Executions should handle unknown configuration names" time="0.003">
+    </testcase>
+    <testcase classname="Dashboard Header and Refresh should display dashboard title and last updated time" name="Dashboard Header and Refresh should display dashboard title and last updated time" time="0.003">
+    </testcase>
+    <testcase classname="Dashboard Header and Refresh should show refresh button when onRefresh is provided" name="Dashboard Header and Refresh should show refresh button when onRefresh is provided" time="0.007">
+    </testcase>
+    <testcase classname="Dashboard Header and Refresh should not show refresh button when onRefresh is not provided" name="Dashboard Header and Refresh should not show refresh button when onRefresh is not provided" time="0.004">
+    </testcase>
+    <testcase classname="Dashboard Quick Actions should display quick actions section" name="Dashboard Quick Actions should display quick actions section" time="0.005">
+    </testcase>
+    <testcase classname="Dashboard Quick Actions should display quick action descriptions" name="Dashboard Quick Actions should display quick action descriptions" time="0.004">
+    </testcase>
+    <testcase classname="Dashboard Status Colors should apply correct colors for different statuses" name="Dashboard Status Colors should apply correct colors for different statuses" time="0.006">
+    </testcase>
+    <testcase classname="Dashboard Execution Count Display should show correct execution count in header" name="Dashboard Execution Count Display should show correct execution count in header" time="0.004">
+    </testcase>
+  </testsuite>
 </testsuites>

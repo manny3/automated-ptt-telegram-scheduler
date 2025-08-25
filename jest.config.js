@@ -10,8 +10,8 @@ const customJestConfig = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   
-  // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
-  moduleDirectories: ['node_modules', '<rootDir>/'],
+  // Test environment
+  testEnvironment: 'jest-environment-jsdom',
   
   // Module name mapping for path aliases
   moduleNameMapper: {
@@ -23,9 +23,6 @@ const customJestConfig = {
     '^@/types/(.*)$': '<rootDir>/src/types/$1',
     '^@/middleware/(.*)$': '<rootDir>/src/middleware/$1',
   },
-  
-  // Test environment
-  testEnvironment: 'jest-environment-jsdom',
   
   // Test patterns
   testMatch: [
@@ -39,7 +36,7 @@ const customJestConfig = {
     '!src/**/*.d.ts',
     '!src/pages/_app.tsx',
     '!src/pages/_document.tsx',
-    '!src/pages/api/**/*.ts', // API routes tested separately
+    '!src/pages/api/**/*.ts',
     '!src/**/*.stories.{js,jsx,ts,tsx}',
     '!src/**/*.config.{js,jsx,ts,tsx}',
     '!src/types/**/*.ts',
@@ -64,14 +61,6 @@ const customJestConfig = {
   // Test timeout
   testTimeout: 10000,
   
-  // Transform configuration
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
-  },
-  
-  // Module file extensions
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  
   // Ignore patterns
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
@@ -89,37 +78,6 @@ const customJestConfig = {
   // Global setup and teardown
   globalSetup: '<rootDir>/jest.global-setup.js',
   globalTeardown: '<rootDir>/jest.global-teardown.js',
-  
-  // Test projects for different test types
-  projects: [
-    {
-      displayName: 'unit',
-      testMatch: [
-        '<rootDir>/src/**/__tests__/**/*.test.{js,jsx,ts,tsx}',
-        '<rootDir>/src/**/?(*.)(test).{js,jsx,ts,tsx}',
-      ],
-      testPathIgnorePatterns: [
-        '<rootDir>/src/__tests__/integration/',
-        '<rootDir>/src/__tests__/e2e/',
-        '<rootDir>/src/__tests__/performance/',
-      ],
-    },
-    {
-      displayName: 'integration',
-      testMatch: ['<rootDir>/src/__tests__/integration/**/*.test.{js,jsx,ts,tsx}'],
-      testTimeout: 30000,
-    },
-    {
-      displayName: 'e2e',
-      testMatch: ['<rootDir>/src/__tests__/e2e/**/*.test.{js,jsx,ts,tsx}'],
-      testTimeout: 60000,
-    },
-    {
-      displayName: 'performance',
-      testMatch: ['<rootDir>/src/__tests__/performance/**/*.test.{js,jsx,ts,tsx}'],
-      testTimeout: 120000,
-    },
-  ],
   
   // Reporters
   reporters: [

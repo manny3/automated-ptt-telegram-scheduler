@@ -19,6 +19,11 @@
     "test:ci": "jest --ci --coverage --watchAll=false",
     "test:smoke": "jest --testNamePattern='smoke'",
     "test:health-check": "jest --testNamePattern='health'",
+    "install:deps": "./scripts/install-dependencies.sh",
+    "setup:local": "./scripts/setup-local-dev.sh",
+    "deps:verify": "npm list --depth=0",
+    "deps:validate": "./scripts/validate-dependencies.sh",
+    "deps:audit": "npm audit --audit-level moderate",
     "deploy": "./scripts/deploy-all.sh",
     "deploy:staging": "./scripts/deploy-staging.sh",
     "deploy:production": "./scripts/deploy-production.sh"

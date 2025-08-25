@@ -25,8 +25,34 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.npm
+          node_modules
+          .next/cache
+        key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
+          ${{ runner.os }}-node-
+
+    - name: Validate package-lock.json
+      run: |
+        if [ ! -f package-lock.json ]; then
+          echo "Error: package-lock.json not found"
+          exit 1
+        fi
+        echo "package-lock.json exists and is valid"
+
+    - name: Install dependencies with enhanced error handling
+      run: ./scripts/install-dependencies.sh
+      env:
+        NPM_CONFIG_LEGACY_PEER_DEPS: true
+        CI: true
+
+    - name: Validate dependency installation
+      run: ./scripts/validate-dependencies.sh
 
     - name: Run linting
       run: npm run lint
@@ -78,8 +104,22 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.npm
+          node_modules
+        key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies with enhanced error handling
+      run: ./scripts/install-dependencies.sh
+      env:
+        NPM_CONFIG_LEGACY_PEER_DEPS: true
+        CI: true
 
     - name: Run security audit
       run: npm audit --audit-level high
@@ -113,8 +153,23 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+    - name: Cache node modules and build
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.npm
+          node_modules
+          .next/cache
+        key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies with enhanced error handling
+      run: ./scripts/install-dependencies.sh
+      env:
+        NPM_CONFIG_LEGACY_PEER_DEPS: true
+        CI: true
 
     - name: Build Next.js application
       run: npm run build
