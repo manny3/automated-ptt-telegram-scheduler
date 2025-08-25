@@ -1,0 +1,98 @@
+name: Workflow Status Notification
+
+on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types:
+      - completed
+
+jobs:
+  notify-status:
+    name: Notify Workflow Status
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Generate workflow status report
+      run: |
+        echo "=== Workflow Status Report ===" > workflow-status.md
+        echo "" >> workflow-status.md
+        echo "**Workflow Information:**" >> workflow-status.md
+        echo "- Workflow: ${{ github.event.workflow_run.name }}" >> workflow-status.md
+        echo "- Status: ${{ github.event.workflow_run.conclusion }}" >> workflow-status.md
+        echo "- Run ID: ${{ github.event.workflow_run.id }}" >> workflow-status.md
+        echo "- Run Number: ${{ github.event.workflow_run.run_number }}" >> workflow-status.md
+        echo "- Branch: ${{ github.event.workflow_run.head_branch }}" >> workflow-status.md
+        echo "- Commit: ${{ github.event.workflow_run.head_sha }}" >> workflow-status.md
+        echo "- Actor: ${{ github.event.workflow_run.actor.login }}" >> workflow-status.md
+        echo "- Event: ${{ github.event.workflow_run.event }}" >> workflow-status.md
+        echo "" >> workflow-status.md
+        
+        if [ "${{ github.event.workflow_run.conclusion }}" == "success" ]; then
+          echo "✅ **Status: SUCCESS**" >> workflow-status.md
+          echo "" >> workflow-status.md
+          echo "All checks passed successfully!" >> workflow-status.md
+        elif [ "${{ github.event.workflow_run.conclusion }}" == "failure" ]; then
+          echo "❌ **Status: FAILURE**" >> workflow-status.md
+          echo "" >> workflow-status.md
+          echo "**Action Required:**" >> workflow-status.md
+          echo "- Check the workflow logs for detailed error information" >> workflow-status.md
+          echo "- Review failed jobs and fix any issues" >> workflow-status.md
+          echo "- Re-run the workflow after fixes are applied" >> workflow-status.md
+        elif [ "${{ github.event.workflow_run.conclusion }}" == "cancelled" ]; then
+          echo "⚠️ **Status: CANCELLED**" >> workflow-status.md
+          echo "" >> workflow-status.md
+          echo "The workflow was cancelled before completion." >> workflow-status.md
+        else
+          echo "ℹ️ **Status: ${{ github.event.workflow_run.conclusion }}**" >> workflow-status.md
+        fi
+        
+        echo "" >> workflow-status.md
+        echo "**Links:**" >> workflow-status.md
+        echo "- [View Workflow Run](${{ github.event.workflow_run.html_url }})" >> workflow-status.md
+        echo "- [View Commit](${{ github.event.repository.html_url }}/commit/${{ github.event.workflow_run.head_sha }})" >> workflow-status.md
+
+    - name: Create issue on failure
+      if: github.event.workflow_run.conclusion == 'failure'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('workflow-status.md', 'utf8');
+          
+          // Check if there's already an open issue for this workflow failure
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: 'ci-failure'
+          });
+          
+          const existingIssue = issues.data.find(issue => 
+            issue.title.includes('CI/CD Pipeline Failure') && 
+            issue.body.includes('${{ github.event.workflow_run.head_sha }}')
+          );
+          
+          if (!existingIssue) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `CI/CD Pipeline Failure - Run #${{ github.event.workflow_run.run_number }}`,
+              body: `## 🚨 CI/CD Pipeline Failure\n\n${report}\n\n---\n*This issue was automatically created by the workflow status notification system.*`,
+              labels: ['ci-failure', 'bug', 'priority-high']
+            });
+          }
+
+    - name: Update status badge
+      run: |
+        # This would typically update a status badge or external monitoring system
+        echo "Workflow status: ${{ github.event.workflow_run.conclusion }}"
+        echo "This step can be extended to update external monitoring systems"

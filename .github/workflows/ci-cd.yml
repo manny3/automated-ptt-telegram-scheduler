@@ -9,126 +9,318 @@ on:
 env:
   NODE_VERSION: '18'
   GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+  # Enhanced CI configuration
+  NPM_CONFIG_LEGACY_PEER_DEPS: true
+  NPM_CONFIG_AUDIT_LEVEL: moderate
+  NPM_CONFIG_FUND: false
+  FORCE_COLOR: 1
 
 jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['18', '20']
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-    - name: Setup Node.js
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ env.NODE_VERSION }}
+        node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: package-lock.json
 
-    - name: Cache node modules
-      uses: actions/cache@v3
+    - name: Enhanced multi-layer caching
+      uses: actions/cache@v4
       with:
         path: |
           ~/.npm
           node_modules
           .next/cache
-        key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+          .jest-cache
+          coverage
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-deps-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('jest.config.js') }}
         restore-keys: |
-          ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-node-${{ matrix.node-version }}-deps-${{ hashFiles('**/package-lock.json') }}-
+          ${{ runner.os }}-node-${{ matrix.node-version }}-deps-
+          ${{ runner.os }}-node-${{ matrix.node-version }}-
 
-    - name: Validate package-lock.json
+    - name: Display environment diagnostics
       run: |
-        if [ ! -f package-lock.json ]; then
-          echo "Error: package-lock.json not found"
+        echo "=== Environment Information ==="
+        echo "Node.js version: $(node --version)"
+        echo "npm version: $(npm --version)"
+        echo "Platform: $(uname -a)"
+        echo "Available memory: $(free -h || echo 'N/A')"
+        echo "Available disk space: $(df -h . || echo 'N/A')"
+        echo "Current directory: $(pwd)"
+        echo "Environment variables:"
+        env | grep -E '^(NODE_|NPM_|CI|GITHUB_)' | sort
+        echo "================================"
+
+    - name: Validate package files
+      run: |
+        echo "=== Package File Validation ==="
+        if [ ! -f package.json ]; then
+          echo "❌ Error: package.json not found"
           exit 1
         fi
-        echo "package-lock.json exists and is valid"
+        echo "✅ package.json exists"
+        
+        if [ ! -f package-lock.json ]; then
+          echo "❌ Error: package-lock.json not found"
+          exit 1
+        fi
+        echo "✅ package-lock.json exists"
+        
+        # Validate JSON syntax
+        if ! node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"; then
+          echo "❌ Error: package.json has invalid JSON syntax"
+          exit 1
+        fi
+        echo "✅ package.json has valid JSON syntax"
+        
+        if ! node -e "JSON.parse(require('fs').readFileSync('package-lock.json', 'utf8'))"; then
+          echo "❌ Error: package-lock.json has invalid JSON syntax"
+          exit 1
+        fi
+        echo "✅ package-lock.json has valid JSON syntax"
+        echo "================================"
 
     - name: Install dependencies with enhanced error handling
-      run: ./scripts/install-dependencies.sh
+      run: |
+        echo "=== Dependency Installation ==="
+        ./scripts/install-dependencies.sh
       env:
-        NPM_CONFIG_LEGACY_PEER_DEPS: true
         CI: true
+        NODE_ENV: test
 
     - name: Validate dependency installation
-      run: ./scripts/validate-dependencies.sh
+      run: |
+        echo "=== Dependency Validation ==="
+        ./scripts/validate-dependencies.sh
+        
+        # Additional validation
+        echo "Checking critical dependencies..."
+        npm list react @testing-library/react jest typescript next --depth=0 || {
+          echo "❌ Critical dependencies missing or invalid"
+          echo "Full dependency tree:"
+          npm list --depth=0
+          exit 1
+        }
+        echo "✅ All critical dependencies validated"
 
-    - name: Run linting
-      run: npm run lint
+    - name: Run linting with detailed output
+      run: |
+        echo "=== ESLint Analysis ==="
+        npm run lint -- --format=compact --max-warnings=0 || {
+          echo "❌ Linting failed"
+          echo "Running lint with detailed output for debugging..."
+          npm run lint -- --format=stylish || true
+          exit 1
+        }
+        echo "✅ Linting passed"
 
-    - name: Run type checking
-      run: npm run type-check
+    - name: Run type checking with detailed output
+      run: |
+        echo "=== TypeScript Type Checking ==="
+        npm run type-check || {
+          echo "❌ Type checking failed"
+          echo "TypeScript configuration:"
+          cat tsconfig.json
+          exit 1
+        }
+        echo "✅ Type checking passed"
 
-    - name: Run unit tests
-      run: npm run test:unit
+    - name: Run unit tests with enhanced reporting
+      run: |
+        echo "=== Unit Tests ==="
+        npm run test:unit -- --verbose --detectOpenHandles --forceExit || {
+          echo "❌ Unit tests failed"
+          echo "Jest configuration:"
+          npx jest --showConfig
+          exit 1
+        }
+        echo "✅ Unit tests passed"
       env:
         NODE_ENV: test
 
-    - name: Run integration tests
-      run: npm run test:integration
+    - name: Run integration tests with enhanced reporting
+      run: |
+        echo "=== Integration Tests ==="
+        npm run test:integration -- --verbose --detectOpenHandles --forceExit || {
+          echo "❌ Integration tests failed"
+          exit 1
+        }
+        echo "✅ Integration tests passed"
       env:
         NODE_ENV: test
 
-    - name: Run E2E tests
-      run: npm run test:e2e
+    - name: Run E2E tests with enhanced reporting
+      run: |
+        echo "=== E2E Tests ==="
+        npm run test:e2e -- --verbose --detectOpenHandles --forceExit || {
+          echo "❌ E2E tests failed"
+          exit 1
+        }
+        echo "✅ E2E tests passed"
       env:
         NODE_ENV: test
 
-    - name: Run performance tests
-      run: npm run test:performance
+    - name: Run performance tests with enhanced reporting
+      run: |
+        echo "=== Performance Tests ==="
+        npm run test:performance -- --verbose --detectOpenHandles --forceExit || {
+          echo "❌ Performance tests failed"
+          exit 1
+        }
+        echo "✅ Performance tests passed"
       env:
         NODE_ENV: test
 
-    - name: Generate test coverage
-      run: npm run test:coverage
+    - name: Generate comprehensive test coverage
+      run: |
+        echo "=== Test Coverage Generation ==="
+        npm run test:coverage -- --detectOpenHandles --forceExit || {
+          echo "❌ Coverage generation failed"
+          exit 1
+        }
+        
+        # Display coverage summary
+        if [ -f coverage/coverage-summary.json ]; then
+          echo "Coverage Summary:"
+          cat coverage/coverage-summary.json | jq '.total'
+        fi
+        echo "✅ Coverage generation completed"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-node-${{ matrix.node-version }}
+        path: |
+          coverage/
+          test-results/
+          junit.xml
+        retention-days: 7
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
+      if: matrix.node-version == '18'
       with:
         file: ./coverage/lcov.info
         flags: unittests
         name: codecov-umbrella
+        fail_ci_if_error: false
+        verbose: true
+
+    - name: Test failure diagnostics
+      if: failure()
+      run: |
+        echo "=== Test Failure Diagnostics ==="
+        echo "Node.js version: $(node --version)"
+        echo "npm version: $(npm --version)"
+        echo "Available memory: $(free -h || echo 'N/A')"
+        echo "Available disk space: $(df -h . || echo 'N/A')"
+        
+        echo "Recent npm logs:"
+        if [ -f ~/.npm/_logs/*.log ]; then
+          tail -50 ~/.npm/_logs/*.log || echo "No npm logs found"
+        fi
+        
+        echo "Jest cache info:"
+        if [ -d .jest-cache ]; then
+          ls -la .jest-cache/ || echo "Jest cache directory empty"
+        fi
+        
+        echo "Process information:"
+        ps aux | head -20 || echo "Process info unavailable"
+        
+        echo "================================"
 
   security:
     name: Security Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
+        cache-dependency-path: package-lock.json
 
-    - name: Cache node modules
-      uses: actions/cache@v3
+    - name: Enhanced security scan caching
+      uses: actions/cache@v4
       with:
         path: |
           ~/.npm
           node_modules
-        key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-security-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-security-node-${{ env.NODE_VERSION }}-
+          ${{ runner.os }}-security-node-
 
     - name: Install dependencies with enhanced error handling
-      run: ./scripts/install-dependencies.sh
+      run: |
+        echo "=== Security Scan Dependencies Installation ==="
+        ./scripts/install-dependencies.sh
       env:
-        NPM_CONFIG_LEGACY_PEER_DEPS: true
         CI: true
 
-    - name: Run security audit
-      run: npm audit --audit-level high
+    - name: Run security audit with detailed reporting
+      run: |
+        echo "=== NPM Security Audit ==="
+        npm audit --audit-level high --json > audit-results.json || {
+          echo "❌ Security vulnerabilities found"
+          echo "Audit results:"
+          cat audit-results.json | jq '.vulnerabilities // empty'
+          exit 1
+        }
+        echo "✅ No high-severity vulnerabilities found"
 
     - name: Run dependency vulnerability scan
-      run: npx audit-ci --config audit-ci.json
+      run: |
+        echo "=== Dependency Vulnerability Scan ==="
+        if [ -f audit-ci.json ]; then
+          npx audit-ci --config audit-ci.json || {
+            echo "❌ Vulnerability scan failed"
+            exit 1
+          }
+        else
+          echo "⚠️ audit-ci.json not found, using default configuration"
+          npx audit-ci --moderate || {
+            echo "❌ Vulnerability scan failed"
+            exit 1
+          }
+        fi
+        echo "✅ Vulnerability scan passed"
 
-    - name: Run SAST scan
-      uses: github/super-linter@v4
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-scan-results
+        path: |
+          audit-results.json
+        retention-days: 30
+
+    - name: Run SAST scan with enhanced configuration
+      uses: github/super-linter@v5
       env:
         DEFAULT_BRANCH: main
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -137,10 +329,14 @@ jobs:
         VALIDATE_JSON: true
         VALIDATE_YAML: true
         VALIDATE_DOCKERFILE: true
+        VALIDATE_BASH: true
+        LOG_LEVEL: WARN
+        SUPPRESS_POSSUM: true
 
   build:
     name: Build Application
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     needs: [test, security]
     
     steps:
@@ -152,60 +348,266 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
+        cache-dependency-path: package-lock.json
 
-    - name: Cache node modules and build
-      uses: actions/cache@v3
+    - name: Enhanced build caching
+      uses: actions/cache@v4
       with:
         path: |
           ~/.npm
           node_modules
           .next/cache
-        key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+          .next/static
+        key: ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('next.config.js') }}
         restore-keys: |
-          ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
-          ${{ runner.os }}-node-
+          ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}-
+          ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-
+          ${{ runner.os }}-build-node-
 
     - name: Install dependencies with enhanced error handling
-      run: ./scripts/install-dependencies.sh
+      run: |
+        echo "=== Build Dependencies Installation ==="
+        ./scripts/install-dependencies.sh
       env:
-        NPM_CONFIG_LEGACY_PEER_DEPS: true
         CI: true
 
-    - name: Build Next.js application
-      run: npm run build
+    - name: Build Next.js application with detailed logging
+      run: |
+        echo "=== Next.js Build Process ==="
+        echo "Build environment:"
+        echo "  NODE_ENV: production"
+        echo "  Next.js version: $(npm list next --depth=0 2>/dev/null | grep next || echo 'Unknown')"
+        echo "  Available memory: $(free -h || echo 'N/A')"
+        echo "  Available disk space: $(df -h . || echo 'N/A')"
+        
+        npm run build || {
+          echo "❌ Build failed"
+          echo "Build logs and diagnostics:"
+          if [ -f .next/build-manifest.json ]; then
+            echo "Build manifest exists"
+          else
+            echo "Build manifest missing"
+          fi
+          exit 1
+        }
+        
+        echo "✅ Build completed successfully"
+        echo "Build output size:"
+        du -sh .next/ || echo "Unable to calculate build size"
       env:
         NODE_ENV: production
 
-    - name: Build Docker image
+    - name: Build Docker image with enhanced error handling
       run: |
-        docker build -t ptt-telegram-scheduler:${{ github.sha }} .
+        echo "=== Docker Image Build ==="
+        echo "Docker version: $(docker --version)"
+        echo "Available disk space: $(df -h . || echo 'N/A')"
+        
+        docker build -t ptt-telegram-scheduler:${{ github.sha }} . || {
+          echo "❌ Docker build failed"
+          echo "Docker system info:"
+          docker system df || echo "Unable to get Docker system info"
+          exit 1
+        }
+        
         docker tag ptt-telegram-scheduler:${{ github.sha }} ptt-telegram-scheduler:latest
+        echo "✅ Docker image built successfully"
+        
+        echo "Image details:"
+        docker images ptt-telegram-scheduler:${{ github.sha }} --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
-    - name: Test Docker image
+    - name: Test Docker image with comprehensive health checks
       run: |
-        docker run --rm -d --name test-container -p 3000:3000 ptt-telegram-scheduler:latest
-        sleep 10
-        curl -f http://localhost:3000/api/health || exit 1
+        echo "=== Docker Image Testing ==="
+        
+        # Start container with health check
+        docker run --rm -d --name test-container -p 3000:3000 \
+          --health-cmd="curl -f http://localhost:3000/api/health || exit 1" \
+          --health-interval=5s \
+          --health-timeout=3s \
+          --health-retries=3 \
+          ptt-telegram-scheduler:latest || {
+          echo "❌ Failed to start test container"
+          exit 1
+        }
+        
+        # Wait for container to be ready
+        echo "Waiting for container to be ready..."
+        for i in {1..30}; do
+          if docker exec test-container curl -f http://localhost:3000/api/health >/dev/null 2>&1; then
+            echo "✅ Container is healthy"
+            break
+          fi
+          if [ $i -eq 30 ]; then
+            echo "❌ Container health check timeout"
+            echo "Container logs:"
+            docker logs test-container
+            docker stop test-container
+            exit 1
+          fi
+          sleep 2
+        done
+        
+        # Additional health checks
+        echo "Running additional health checks..."
+        curl -f http://localhost:3000/api/health || {
+          echo "❌ Health endpoint check failed"
+          echo "Container logs:"
+          docker logs test-container
+          docker stop test-container
+          exit 1
+        }
+        
         docker stop test-container
+        echo "✅ Docker image testing completed successfully"
 
-    - name: Save Docker image
-      run: docker save ptt-telegram-scheduler:${{ github.sha }} | gzip > ptt-telegram-scheduler.tar.gz
+    - name: Save Docker image with compression
+      run: |
+        echo "=== Docker Image Export ==="
+        docker save ptt-telegram-scheduler:${{ github.sha }} | gzip > ptt-telegram-scheduler.tar.gz
+        
+        echo "Compressed image size:"
+        ls -lh ptt-telegram-scheduler.tar.gz
+        echo "✅ Docker image saved successfully"
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+    - name: Upload build artifacts with enhanced metadata
+      uses: actions/upload-artifact@v4
       with:
-        name: build-artifacts
+        name: build-artifacts-${{ github.sha }}
         path: |
           .next/
           ptt-telegram-scheduler.tar.gz
         retention-days: 7
 
+    - name: Build failure diagnostics
+      if: failure()
+      run: |
+        echo "=== Build Failure Diagnostics ==="
+        echo "System information:"
+        echo "  Available memory: $(free -h || echo 'N/A')"
+        echo "  Available disk space: $(df -h . || echo 'N/A')"
+        echo "  Docker system info:"
+        docker system df || echo "Docker system info unavailable"
+        
+        echo "Build artifacts:"
+        ls -la .next/ || echo ".next directory not found"
+        
+        echo "Docker images:"
+        docker images || echo "Unable to list Docker images"
+        
+        echo "Recent logs:"
+        if [ -f ~/.npm/_logs/*.log ]; then
+          tail -50 ~/.npm/_logs/*.log || echo "No npm logs found"
+        fi
+
+  monitoring:
+    name: CI/CD Monitoring & Reporting
+    runs-on: ubuntu-latest
+    needs: [test, security, build]
+    if: always()
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download test artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: test-results-*
+        merge-multiple: true
+      continue-on-error: true
+
+    - name: Download security scan results
+      uses: actions/download-artifact@v4
+      with:
+        name: security-scan-results
+      continue-on-error: true
+
+    - name: Generate CI/CD performance report
+      run: |
+        echo "=== CI/CD Pipeline Performance Report ===" > pipeline-report.md
+        echo "" >> pipeline-report.md
+        echo "**Pipeline Run Information:**" >> pipeline-report.md
+        echo "- Run ID: ${{ github.run_id }}" >> pipeline-report.md
+        echo "- Run Number: ${{ github.run_number }}" >> pipeline-report.md
+        echo "- Commit SHA: ${{ github.sha }}" >> pipeline-report.md
+        echo "- Branch: ${{ github.ref_name }}" >> pipeline-report.md
+        echo "- Triggered by: ${{ github.event_name }}" >> pipeline-report.md
+        echo "- Actor: ${{ github.actor }}" >> pipeline-report.md
+        echo "" >> pipeline-report.md
+        
+        echo "**Job Status Summary:**" >> pipeline-report.md
+        echo "- Test Job: ${{ needs.test.result }}" >> pipeline-report.md
+        echo "- Security Job: ${{ needs.security.result }}" >> pipeline-report.md
+        echo "- Build Job: ${{ needs.build.result }}" >> pipeline-report.md
+        echo "" >> pipeline-report.md
+        
+        # Add test results summary if available
+        if [ -f test-results/junit.xml ]; then
+          echo "**Test Results Summary:**" >> pipeline-report.md
+          echo '```' >> pipeline-report.md
+          grep -E "(tests|failures|errors|skipped)" test-results/junit.xml | head -5 >> pipeline-report.md || echo "Test summary unavailable" >> pipeline-report.md
+          echo '```' >> pipeline-report.md
+          echo "" >> pipeline-report.md
+        fi
+        
+        # Add coverage summary if available
+        if [ -f coverage/coverage-summary.json ]; then
+          echo "**Coverage Summary:**" >> pipeline-report.md
+          echo '```json' >> pipeline-report.md
+          cat coverage/coverage-summary.json | jq '.total' >> pipeline-report.md || echo "Coverage summary unavailable" >> pipeline-report.md
+          echo '```' >> pipeline-report.md
+          echo "" >> pipeline-report.md
+        fi
+        
+        echo "**Recommendations:**" >> pipeline-report.md
+        if [ "${{ needs.test.result }}" != "success" ]; then
+          echo "- ❌ Test job failed - Review test logs and fix failing tests" >> pipeline-report.md
+        fi
+        if [ "${{ needs.security.result }}" != "success" ]; then
+          echo "- ❌ Security scan failed - Address security vulnerabilities" >> pipeline-report.md
+        fi
+        if [ "${{ needs.build.result }}" != "success" ]; then
+          echo "- ❌ Build job failed - Check build configuration and dependencies" >> pipeline-report.md
+        fi
+        if [ "${{ needs.test.result }}" == "success" ] && [ "${{ needs.security.result }}" == "success" ] && [ "${{ needs.build.result }}" == "success" ]; then
+          echo "- ✅ All jobs completed successfully - Ready for deployment" >> pipeline-report.md
+        fi
+
+    - name: Upload pipeline report
+      uses: actions/upload-artifact@v4
+      with:
+        name: pipeline-report-${{ github.run_id }}
+        path: pipeline-report.md
+        retention-days: 30
+
+    - name: Comment PR with pipeline status
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          let report = '';
+          try {
+            report = fs.readFileSync('pipeline-report.md', 'utf8');
+          } catch (error) {
+            report = 'Pipeline report generation failed';
+          }
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## 🚀 CI/CD Pipeline Report\n\n${report}`
+          });
+
   deploy-staging:
     name: Deploy to Staging
     runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/develop'
+    needs: [build, monitoring]
+    if: github.ref == 'refs/heads/develop' && needs.build.result == 'success'
     environment: staging
+    timeout-minutes: 15
     
     steps:
     - name: Checkout code
@@ -221,9 +623,9 @@ jobs:
       run: gcloud auth configure-docker
 
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: build-artifacts
+        name: build-artifacts-${{ github.sha }}
 
     - name: Load Docker image
       run: docker load < ptt-telegram-scheduler.tar.gz
@@ -270,9 +672,10 @@ jobs:
   deploy-production:
     name: Deploy to Production
     runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
+    needs: [build, monitoring]
+    if: github.ref == 'refs/heads/main' && needs.build.result == 'success'
     environment: production
+    timeout-minutes: 20
     
     steps:
     - name: Checkout code
@@ -288,9 +691,9 @@ jobs:
       run: gcloud auth configure-docker
 
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: build-artifacts
+        name: build-artifacts-${{ github.sha }}
 
     - name: Load Docker image
       run: docker load < ptt-telegram-scheduler.tar.gz
@@ -358,39 +761,182 @@ jobs:
         prerelease: false
 
   notify:
-    name: Notify Deployment
+    name: Enhanced Notification & Reporting
     runs-on: ubuntu-latest
-    needs: [deploy-staging, deploy-production]
+    needs: [test, security, build, monitoring, deploy-staging, deploy-production]
     if: always()
     
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Generate comprehensive status report
+      run: |
+        echo "=== Comprehensive Pipeline Status Report ===" > final-report.md
+        echo "" >> final-report.md
+        echo "**Pipeline Execution Summary:**" >> final-report.md
+        echo "- Run ID: ${{ github.run_id }}" >> final-report.md
+        echo "- Run Number: ${{ github.run_number }}" >> final-report.md
+        echo "- Commit SHA: ${{ github.sha }}" >> final-report.md
+        echo "- Branch: ${{ github.ref_name }}" >> final-report.md
+        echo "- Triggered by: ${{ github.event_name }}" >> final-report.md
+        echo "- Actor: ${{ github.actor }}" >> final-report.md
+        echo "- Timestamp: $(date -u)" >> final-report.md
+        echo "" >> final-report.md
+        
+        echo "**Job Status Summary:**" >> final-report.md
+        echo "- 🧪 Test Job: ${{ needs.test.result }}" >> final-report.md
+        echo "- 🔒 Security Job: ${{ needs.security.result }}" >> final-report.md
+        echo "- 🏗️ Build Job: ${{ needs.build.result }}" >> final-report.md
+        echo "- 📊 Monitoring Job: ${{ needs.monitoring.result }}" >> final-report.md
+        
+        if [ "${{ needs.deploy-staging.result }}" != "skipped" ]; then
+          echo "- 🚀 Staging Deploy: ${{ needs.deploy-staging.result }}" >> final-report.md
+        fi
+        
+        if [ "${{ needs.deploy-production.result }}" != "skipped" ]; then
+          echo "- 🌟 Production Deploy: ${{ needs.deploy-production.result }}" >> final-report.md
+        fi
+        
+        echo "" >> final-report.md
+        
+        # Determine overall status
+        overall_status="success"
+        if [ "${{ needs.test.result }}" == "failure" ] || [ "${{ needs.security.result }}" == "failure" ] || [ "${{ needs.build.result }}" == "failure" ]; then
+          overall_status="failure"
+        elif [ "${{ needs.deploy-staging.result }}" == "failure" ] || [ "${{ needs.deploy-production.result }}" == "failure" ]; then
+          overall_status="deployment_failure"
+        fi
+        
+        echo "OVERALL_STATUS=$overall_status" >> $GITHUB_ENV
+        
+        if [ "$overall_status" == "success" ]; then
+          echo "🎉 **Overall Status: SUCCESS**" >> final-report.md
+          echo "" >> final-report.md
+          echo "All pipeline stages completed successfully!" >> final-report.md
+        elif [ "$overall_status" == "failure" ]; then
+          echo "❌ **Overall Status: FAILURE**" >> final-report.md
+          echo "" >> final-report.md
+          echo "**Critical Issues Detected:**" >> final-report.md
+          if [ "${{ needs.test.result }}" == "failure" ]; then
+            echo "- Tests failed - Review test logs and fix failing tests" >> final-report.md
+          fi
+          if [ "${{ needs.security.result }}" == "failure" ]; then
+            echo "- Security scan failed - Address security vulnerabilities" >> final-report.md
+          fi
+          if [ "${{ needs.build.result }}" == "failure" ]; then
+            echo "- Build failed - Check build configuration and dependencies" >> final-report.md
+          fi
+        elif [ "$overall_status" == "deployment_failure" ]; then
+          echo "⚠️ **Overall Status: DEPLOYMENT FAILURE**" >> final-report.md
+          echo "" >> final-report.md
+          echo "Build and tests passed, but deployment failed. Check deployment logs." >> final-report.md
+        fi
+        
+        echo "" >> final-report.md
+        echo "**Quick Links:**" >> final-report.md
+        echo "- [View Full Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> final-report.md
+        echo "- [View Commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})" >> final-report.md
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          echo "- [View Pull Request](https://github.com/${{ github.repository }}/pull/${{ github.event.number }})" >> final-report.md
+        fi
+
+    - name: Upload final report
+      uses: actions/upload-artifact@v4
+      with:
+        name: final-pipeline-report-${{ github.run_id }}
+        path: final-report.md
+        retention-days: 30
+
     - name: Notify Slack on Success
-      if: success()
+      if: env.OVERALL_STATUS == 'success' && secrets.SLACK_WEBHOOK_URL
       uses: 8398a7/action-slack@v3
       with:
         status: success
         channel: '#deployments'
         text: |
-          ✅ PTT Telegram Scheduler deployment successful!
-          Branch: ${{ github.ref }}
-          Commit: ${{ github.sha }}
-          Environment: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
+          🎉 PTT Telegram Scheduler pipeline completed successfully!
+          
+          📋 **Details:**
+          • Branch: ${{ github.ref_name }}
+          • Commit: ${{ github.sha }}
+          • Environment: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
+          • Run: #${{ github.run_number }}
+          
+          🔗 [View Details](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Notify Slack on Failure
-      if: failure()
+      if: env.OVERALL_STATUS != 'success' && secrets.SLACK_WEBHOOK_URL
       uses: 8398a7/action-slack@v3
       with:
         status: failure
         channel: '#deployments'
         text: |
-          ❌ PTT Telegram Scheduler deployment failed!
-          Branch: ${{ github.ref }}
-          Commit: ${{ github.sha }}
-          Please check the GitHub Actions logs.
+          🚨 PTT Telegram Scheduler pipeline failed!
+          
+          📋 **Details:**
+          • Branch: ${{ github.ref_name }}
+          • Commit: ${{ github.sha }}
+          • Status: ${{ env.OVERALL_STATUS }}
+          • Run: #${{ github.run_number }}
+          
+          ❗ **Failed Jobs:**
+          ${{ needs.test.result == 'failure' && '• Tests' || '' }}
+          ${{ needs.security.result == 'failure' && '• Security Scan' || '' }}
+          ${{ needs.build.result == 'failure' && '• Build' || '' }}
+          ${{ needs.deploy-staging.result == 'failure' && '• Staging Deployment' || '' }}
+          ${{ needs.deploy-production.result == 'failure' && '• Production Deployment' || '' }}
+          
+          🔗 [View Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Create GitHub issue on critical failure
+      if: env.OVERALL_STATUS == 'failure'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = fs.readFileSync('final-report.md', 'utf8');
+          
+          // Check for existing open issues for this type of failure
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: 'ci-failure'
+          });
+          
+          const recentIssue = issues.data.find(issue => {
+            const createdAt = new Date(issue.created_at);
+            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+            return createdAt > oneDayAgo && issue.title.includes('CI/CD Pipeline Failure');
+          });
+          
+          if (!recentIssue) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 CI/CD Pipeline Failure - Run #${{ github.run_number }}`,
+              body: `## Pipeline Failure Report\n\n${report}\n\n---\n\n**Troubleshooting Steps:**\n1. Check the failed job logs for specific error messages\n2. Verify all dependencies are properly installed\n3. Ensure all tests pass locally before pushing\n4. Check for any configuration changes that might affect the build\n\n*This issue was automatically created by the CI/CD monitoring system.*`,
+              labels: ['ci-failure', 'bug', 'priority-high', 'automated']
+            });
+          } else {
+            // Update existing issue with new failure information
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: recentIssue.number,
+              body: `## Additional Failure - Run #${{ github.run_number }}\n\n${report}\n\n*Updated automatically by CI/CD monitoring system.*`
+            });
+          }
 
   cleanup:
     name: Cleanup

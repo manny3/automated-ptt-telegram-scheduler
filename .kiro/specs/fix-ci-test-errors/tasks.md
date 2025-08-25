@@ -21,7 +21,7 @@
   - 驗證本地和 CI 環境的依賴安裝一致性
   - _Requirements: 1.2, 1.4, 4.2_
 
-- [ ] 4. 增強 GitHub Actions workflow 穩定性
+- [x] 4. 增強 GitHub Actions workflow 穩定性
   - 更新 CI workflow 以處理新的依賴安裝需求
   - 優化快取策略以提升安裝速度和穩定性
   - 添加更詳細的錯誤日誌和診斷資訊
