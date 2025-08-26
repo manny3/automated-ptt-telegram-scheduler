@@ -1,37 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="PTT Telegram Scheduler Tests" tests="16" failures="0" errors="0" time="0.568">
-  <testsuite name="Dashboard" errors="0" failures="0" skipped="0" timestamp="2025-08-25T16:41:38" time="0.337" tests="16">
-    <testcase classname="Dashboard Loading State should show loading skeleton when isLoading is true" name="Dashboard Loading State should show loading skeleton when isLoading is true" time="0.013">
+<testsuites name="PTT Telegram Scheduler Tests" tests="42" failures="0" errors="0" time="0.632">
+  <testsuite name="@testing-library/jest-dom 相容性測試" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:02:05" time="0.307" tests="18">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeInTheDocument - 驗證元素存在於 DOM 中" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeInTheDocument - 驗證元素存在於 DOM 中" time="0.014">
     </testcase>
-    <testcase classname="Dashboard Stats Display should display all stats correctly" name="Dashboard Stats Display should display all stats correctly" time="0.038">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveTextContent - 驗證元素文字內容" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveTextContent - 驗證元素文字內容" time="0.002">
     </testcase>
-    <testcase classname="Dashboard Stats Display should calculate success rate correctly" name="Dashboard Stats Display should calculate success rate correctly" time="0.003">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveValue - 驗證表單元素值" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveValue - 驗證表單元素值" time="0.003">
     </testcase>
-    <testcase classname="Dashboard Stats Display should display correct stat labels" name="Dashboard Stats Display should display correct stat labels" time="0.007">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeDisabled/toBeEnabled - 驗證元素啟用狀態" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeDisabled/toBeEnabled - 驗證元素啟用狀態" time="0.002">
     </testcase>
-    <testcase classname="Dashboard Recent Executions should display recent executions correctly" name="Dashboard Recent Executions should display recent executions correctly" time="0.007">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeVisible/toBeInTheDocument - 驗證元素可見性" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeVisible/toBeInTheDocument - 驗證元素可見性" time="0.014">
     </testcase>
-    <testcase classname="Dashboard Recent Executions should format execution time correctly" name="Dashboard Recent Executions should format execution time correctly" time="0.007">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeChecked - 驗證複選框狀態" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeChecked - 驗證複選框狀態" time="0.002">
     </testcase>
-    <testcase classname="Dashboard Recent Executions should show execution duration when available" name="Dashboard Recent Executions should show execution duration when available" time="0.004">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveAttribute - 驗證元素屬性" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveAttribute - 驗證元素屬性" time="0.001">
     </testcase>
-    <testcase classname="Dashboard Recent Executions should show empty state when no executions" name="Dashboard Recent Executions should show empty state when no executions" time="0.004">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveClass - 驗證 CSS 類別" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveClass - 驗證 CSS 類別" time="0.002">
     </testcase>
-    <testcase classname="Dashboard Recent Executions should handle unknown configuration names" name="Dashboard Recent Executions should handle unknown configuration names" time="0.003">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveStyle - 驗證內聯樣式" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveStyle - 驗證內聯樣式" time="0.004">
     </testcase>
-    <testcase classname="Dashboard Header and Refresh should display dashboard title and last updated time" name="Dashboard Header and Refresh should display dashboard title and last updated time" time="0.003">
+    <testcase classname="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeRequired - 驗證必填欄位" name="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeRequired - 驗證必填欄位" time="0.002">
     </testcase>
-    <testcase classname="Dashboard Header and Refresh should show refresh button when onRefresh is provided" name="Dashboard Header and Refresh should show refresh button when onRefresh is provided" time="0.007">
+    <testcase classname="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeInvalid/toBeValid - 驗證表單驗證狀態" name="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeInvalid/toBeValid - 驗證表單驗證狀態" time="0.001">
     </testcase>
-    <testcase classname="Dashboard Header and Refresh should not show refresh button when onRefresh is not provided" name="Dashboard Header and Refresh should not show refresh button when onRefresh is not provided" time="0.004">
+    <testcase classname="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleName - 驗證可訪問名稱" name="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleName - 驗證可訪問名稱" time="0.004">
     </testcase>
-    <testcase classname="Dashboard Quick Actions should display quick actions section" name="Dashboard Quick Actions should display quick actions section" time="0.005">
+    <testcase classname="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleDescription - 驗證可訪問描述" name="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleDescription - 驗證可訪問描述" time="0.002">
     </testcase>
-    <testcase classname="Dashboard Quick Actions should display quick action descriptions" name="Dashboard Quick Actions should display quick action descriptions" time="0.004">
+    <testcase classname="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toBeWithinRange - 自定義數值範圍匹配器" name="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toBeWithinRange - 自定義數值範圍匹配器" time="0">
     </testcase>
-    <testcase classname="Dashboard Status Colors should apply correct colors for different statuses" name="Dashboard Status Colors should apply correct colors for different statuses" time="0.006">
+    <testcase classname="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toHaveBeenCalledWithObjectContaining - 自定義物件匹配器" name="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toHaveBeenCalledWithObjectContaining - 自定義物件匹配器" time="0">
     </testcase>
-    <testcase classname="Dashboard Execution Count Display should show correct execution count in header" name="Dashboard Execution Count Display should show correct execution count in header" time="0.004">
+    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的新 JSX 轉換" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的新 JSX 轉換" time="0.002">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的 key 屬性" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的 key 屬性" time="0.001">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的事件處理" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的事件處理" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="測試環境驗證" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:02:05" time="0.079" tests="24">
+    <testcase classname="測試環境驗證 Jest 配置驗證 應該正確載入 Jest 全域設定" name="測試環境驗證 Jest 配置驗證 應該正確載入 Jest 全域設定" time="0.001">
+    </testcase>
+    <testcase classname="測試環境驗證 Jest 配置驗證 應該正確設定測試超時" name="測試環境驗證 Jest 配置驗證 應該正確設定測試超時" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 Jest 配置驗證 應該有全域測試工具可用" name="測試環境驗證 Jest 配置驗證 應該有全域測試工具可用" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 @testing-library/react 相容性驗證 應該能正確渲染 React 組件" name="測試環境驗證 @testing-library/react 相容性驗證 應該能正確渲染 React 組件" time="0.002">
+    </testcase>
+    <testcase classname="測試環境驗證 @testing-library/react 相容性驗證 應該支援 React 19 的新功能" name="測試環境驗證 @testing-library/react 相容性驗證 應該支援 React 19 的新功能" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeInTheDocument 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeInTheDocument 匹配器" time="0.007">
+    </testcase>
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toHaveValue 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toHaveValue 匹配器" time="0.005">
+    </testcase>
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeDisabled 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeDisabled 匹配器" time="0.003">
+    </testcase>
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeVisible 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeVisible 匹配器" time="0.001">
+    </testcase>
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援自定義匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援自定義匹配器" time="0.001">
+    </testcase>
+    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 window 物件可用" name="測試環境驗證 DOM 測試環境驗證 應該有 window 物件可用" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 localStorage mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 localStorage mock 可用" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 fetch mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 fetch mock 可用" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 IntersectionObserver mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 IntersectionObserver mock 可用" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 ResizeObserver mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 ResizeObserver mock 可用" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 模組路徑解析驗證 應該正確解析 @ 路徑別名" name="測試環境驗證 模組路徑解析驗證 應該正確解析 @ 路徑別名" time="0.002">
+    </testcase>
+    <testcase classname="測試環境驗證 測試覆蓋率配置驗證 應該正確設定覆蓋率收集" name="測試環境驗證 測試覆蓋率配置驗證 應該正確設定覆蓋率收集" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 錯誤處理驗證 應該正確處理測試錯誤" name="測試環境驗證 錯誤處理驗證 應該正確處理測試錯誤" time="0.003">
+    </testcase>
+    <testcase classname="測試環境驗證 錯誤處理驗證 應該正確處理異步錯誤" name="測試環境驗證 錯誤處理驗證 應該正確處理異步錯誤" time="0.001">
+    </testcase>
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock API 回應" name="測試環境驗證 測試工具函數驗證 應該能創建 mock API 回應" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock 執行記錄" name="測試環境驗證 測試工具函數驗證 應該能創建 mock 執行記錄" time="0.001">
+    </testcase>
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock 配置" name="測試環境驗證 測試工具函數驗證 應該能創建 mock 配置" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 回應" name="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 回應" time="0">
+    </testcase>
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 錯誤" name="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 錯誤" time="0">
     </testcase>
   </testsuite>
 </testsuites>
