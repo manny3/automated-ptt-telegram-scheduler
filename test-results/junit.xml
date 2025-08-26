@@ -1,63 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="PTT Telegram Scheduler Tests" tests="42" failures="0" errors="0" time="0.632">
-  <testsuite name="@testing-library/jest-dom 相容性測試" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:02:05" time="0.307" tests="18">
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeInTheDocument - 驗證元素存在於 DOM 中" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeInTheDocument - 驗證元素存在於 DOM 中" time="0.014">
+<testsuites name="PTT Telegram Scheduler Tests" tests="180" failures="27" errors="0" time="228.179">
+  <testsuite name="Validation Functions" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:23:43" time="0.723" tests="26">
+    <testcase classname="Validation Functions validateCreateConfiguration should validate correct data" name="Validation Functions validateCreateConfiguration should validate correct data" time="0.002">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveTextContent - 驗證元素文字內容" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveTextContent - 驗證元素文字內容" time="0.002">
+    <testcase classname="Validation Functions validateCreateConfiguration should reject null or undefined data" name="Validation Functions validateCreateConfiguration should reject null or undefined data" time="0.001">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveValue - 驗證表單元素值" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveValue - 驗證表單元素值" time="0.003">
+    <testcase classname="Validation Functions validateCreateConfiguration name validation should reject empty name" name="Validation Functions validateCreateConfiguration name validation should reject empty name" time="0.001">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeDisabled/toBeEnabled - 驗證元素啟用狀態" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeDisabled/toBeEnabled - 驗證元素啟用狀態" time="0.002">
+    <testcase classname="Validation Functions validateCreateConfiguration name validation should reject name longer than 100 characters" name="Validation Functions validateCreateConfiguration name validation should reject name longer than 100 characters" time="0.001">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeVisible/toBeInTheDocument - 驗證元素可見性" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeVisible/toBeInTheDocument - 驗證元素可見性" time="0.014">
+    <testcase classname="Validation Functions validateCreateConfiguration pttBoard validation should reject empty board name" name="Validation Functions validateCreateConfiguration pttBoard validation should reject empty board name" time="0.001">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeChecked - 驗證複選框狀態" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeChecked - 驗證複選框狀態" time="0.002">
+    <testcase classname="Validation Functions validateCreateConfiguration pttBoard validation should reject board name with invalid characters" name="Validation Functions validateCreateConfiguration pttBoard validation should reject board name with invalid characters" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveAttribute - 驗證元素屬性" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveAttribute - 驗證元素屬性" time="0.001">
+    <testcase classname="Validation Functions validateCreateConfiguration pttBoard validation should accept valid board names" name="Validation Functions validateCreateConfiguration pttBoard validation should accept valid board names" time="0.001">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveClass - 驗證 CSS 類別" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveClass - 驗證 CSS 類別" time="0.002">
+    <testcase classname="Validation Functions validateCreateConfiguration keywords validation should reject empty keywords array" name="Validation Functions validateCreateConfiguration keywords validation should reject empty keywords array" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveStyle - 驗證內聯樣式" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveStyle - 驗證內聯樣式" time="0.004">
+    <testcase classname="Validation Functions validateCreateConfiguration keywords validation should reject non-array keywords" name="Validation Functions validateCreateConfiguration keywords validation should reject non-array keywords" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeRequired - 驗證必填欄位" name="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeRequired - 驗證必填欄位" time="0.002">
+    <testcase classname="Validation Functions validateCreateConfiguration keywords validation should reject too many keywords" name="Validation Functions validateCreateConfiguration keywords validation should reject too many keywords" time="0.001">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeInvalid/toBeValid - 驗證表單驗證狀態" name="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeInvalid/toBeValid - 驗證表單驗證狀態" time="0.001">
+    <testcase classname="Validation Functions validateCreateConfiguration keywords validation should reject empty keyword strings" name="Validation Functions validateCreateConfiguration keywords validation should reject empty keyword strings" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleName - 驗證可訪問名稱" name="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleName - 驗證可訪問名稱" time="0.004">
+    <testcase classname="Validation Functions validateCreateConfiguration keywords validation should reject keywords that are too long" name="Validation Functions validateCreateConfiguration keywords validation should reject keywords that are too long" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleDescription - 驗證可訪問描述" name="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleDescription - 驗證可訪問描述" time="0.002">
+    <testcase classname="Validation Functions validateCreateConfiguration postCount validation should reject non-integer values" name="Validation Functions validateCreateConfiguration postCount validation should reject non-integer values" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toBeWithinRange - 自定義數值範圍匹配器" name="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toBeWithinRange - 自定義數值範圍匹配器" time="0">
+    <testcase classname="Validation Functions validateCreateConfiguration postCount validation should reject values outside 1-100 range" name="Validation Functions validateCreateConfiguration postCount validation should reject values outside 1-100 range" time="0.013">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toHaveBeenCalledWithObjectContaining - 自定義物件匹配器" name="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toHaveBeenCalledWithObjectContaining - 自定義物件匹配器" time="0">
+    <testcase classname="Validation Functions validateCreateConfiguration postCount validation should accept valid post counts" name="Validation Functions validateCreateConfiguration postCount validation should accept valid post counts" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的新 JSX 轉換" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的新 JSX 轉換" time="0.002">
+    <testcase classname="Validation Functions validateCreateConfiguration schedule validation should reject invalid schedule types" name="Validation Functions validateCreateConfiguration schedule validation should reject invalid schedule types" time="0">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的 key 屬性" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的 key 屬性" time="0.001">
+    <testcase classname="Validation Functions validateCreateConfiguration schedule validation should validate custom schedule intervals" name="Validation Functions validateCreateConfiguration schedule validation should validate custom schedule intervals" time="0.001">
     </testcase>
-    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的事件處理" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的事件處理" time="0">
+    <testcase classname="Validation Functions validateCreateConfiguration schedule validation should validate daily schedule times" name="Validation Functions validateCreateConfiguration schedule validation should validate daily schedule times" time="0">
+    </testcase>
+    <testcase classname="Validation Functions validateCreateConfiguration telegramChatId validation should reject empty chat ID" name="Validation Functions validateCreateConfiguration telegramChatId validation should reject empty chat ID" time="0">
+    </testcase>
+    <testcase classname="Validation Functions validateCreateConfiguration telegramChatId validation should reject non-numeric chat IDs" name="Validation Functions validateCreateConfiguration telegramChatId validation should reject non-numeric chat IDs" time="0">
+    </testcase>
+    <testcase classname="Validation Functions validateCreateConfiguration telegramChatId validation should accept valid chat IDs" name="Validation Functions validateCreateConfiguration telegramChatId validation should accept valid chat IDs" time="0">
+    </testcase>
+    <testcase classname="Validation Functions validateUpdateConfiguration should allow partial updates" name="Validation Functions validateUpdateConfiguration should allow partial updates" time="0">
+    </testcase>
+    <testcase classname="Validation Functions validateUpdateConfiguration should validate isActive field" name="Validation Functions validateUpdateConfiguration should validate isActive field" time="0">
+    </testcase>
+    <testcase classname="Validation Functions validateUpdateConfiguration should validate provided fields with same rules as create" name="Validation Functions validateUpdateConfiguration should validate provided fields with same rules as create" time="0.001">
+    </testcase>
+    <testcase classname="Validation Functions validateConfigurationId should accept valid IDs" name="Validation Functions validateConfigurationId should accept valid IDs" time="0.005">
+    </testcase>
+    <testcase classname="Validation Functions validateConfigurationId should reject empty IDs" name="Validation Functions validateConfigurationId should reject empty IDs" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="測試環境驗證" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:02:05" time="0.079" tests="24">
-    <testcase classname="測試環境驗證 Jest 配置驗證 應該正確載入 Jest 全域設定" name="測試環境驗證 Jest 配置驗證 應該正確載入 Jest 全域設定" time="0.001">
+  <testsuite name="測試環境驗證" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:23:43" time="0.823" tests="24">
+    <testcase classname="測試環境驗證 Jest 配置驗證 應該正確載入 Jest 全域設定" name="測試環境驗證 Jest 配置驗證 應該正確載入 Jest 全域設定" time="0.003">
     </testcase>
-    <testcase classname="測試環境驗證 Jest 配置驗證 應該正確設定測試超時" name="測試環境驗證 Jest 配置驗證 應該正確設定測試超時" time="0">
+    <testcase classname="測試環境驗證 Jest 配置驗證 應該正確設定測試超時" name="測試環境驗證 Jest 配置驗證 應該正確設定測試超時" time="0.002">
     </testcase>
     <testcase classname="測試環境驗證 Jest 配置驗證 應該有全域測試工具可用" name="測試環境驗證 Jest 配置驗證 應該有全域測試工具可用" time="0">
     </testcase>
-    <testcase classname="測試環境驗證 @testing-library/react 相容性驗證 應該能正確渲染 React 組件" name="測試環境驗證 @testing-library/react 相容性驗證 應該能正確渲染 React 組件" time="0.002">
+    <testcase classname="測試環境驗證 @testing-library/react 相容性驗證 應該能正確渲染 React 組件" name="測試環境驗證 @testing-library/react 相容性驗證 應該能正確渲染 React 組件" time="0.019">
     </testcase>
-    <testcase classname="測試環境驗證 @testing-library/react 相容性驗證 應該支援 React 19 的新功能" name="測試環境驗證 @testing-library/react 相容性驗證 應該支援 React 19 的新功能" time="0">
+    <testcase classname="測試環境驗證 @testing-library/react 相容性驗證 應該支援 React 19 的新功能" name="測試環境驗證 @testing-library/react 相容性驗證 應該支援 React 19 的新功能" time="0.065">
     </testcase>
-    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeInTheDocument 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeInTheDocument 匹配器" time="0.007">
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeInTheDocument 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeInTheDocument 匹配器" time="0.032">
     </testcase>
-    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toHaveValue 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toHaveValue 匹配器" time="0.005">
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toHaveValue 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toHaveValue 匹配器" time="0.008">
     </testcase>
-    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeDisabled 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeDisabled 匹配器" time="0.003">
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeDisabled 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeDisabled 匹配器" time="0.016">
     </testcase>
-    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeVisible 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeVisible 匹配器" time="0.001">
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeVisible 匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援 toBeVisible 匹配器" time="0.003">
     </testcase>
-    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援自定義匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援自定義匹配器" time="0.001">
+    <testcase classname="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援自定義匹配器" name="測試環境驗證 @testing-library/jest-dom 匹配器驗證 應該支援自定義匹配器" time="0.002">
     </testcase>
     <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 window 物件可用" name="測試環境驗證 DOM 測試環境驗證 應該有 window 物件可用" time="0">
     </testcase>
@@ -65,27 +81,682 @@
     </testcase>
     <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 fetch mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 fetch mock 可用" time="0">
     </testcase>
-    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 IntersectionObserver mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 IntersectionObserver mock 可用" time="0">
+    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 IntersectionObserver mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 IntersectionObserver mock 可用" time="0.005">
     </testcase>
-    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 ResizeObserver mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 ResizeObserver mock 可用" time="0">
+    <testcase classname="測試環境驗證 DOM 測試環境驗證 應該有 ResizeObserver mock 可用" name="測試環境驗證 DOM 測試環境驗證 應該有 ResizeObserver mock 可用" time="0.011">
     </testcase>
-    <testcase classname="測試環境驗證 模組路徑解析驗證 應該正確解析 @ 路徑別名" name="測試環境驗證 模組路徑解析驗證 應該正確解析 @ 路徑別名" time="0.002">
+    <testcase classname="測試環境驗證 模組路徑解析驗證 應該正確解析 @ 路徑別名" name="測試環境驗證 模組路徑解析驗證 應該正確解析 @ 路徑別名" time="0.004">
     </testcase>
     <testcase classname="測試環境驗證 測試覆蓋率配置驗證 應該正確設定覆蓋率收集" name="測試環境驗證 測試覆蓋率配置驗證 應該正確設定覆蓋率收集" time="0">
     </testcase>
-    <testcase classname="測試環境驗證 錯誤處理驗證 應該正確處理測試錯誤" name="測試環境驗證 錯誤處理驗證 應該正確處理測試錯誤" time="0.003">
+    <testcase classname="測試環境驗證 錯誤處理驗證 應該正確處理測試錯誤" name="測試環境驗證 錯誤處理驗證 應該正確處理測試錯誤" time="0.007">
     </testcase>
-    <testcase classname="測試環境驗證 錯誤處理驗證 應該正確處理異步錯誤" name="測試環境驗證 錯誤處理驗證 應該正確處理異步錯誤" time="0.001">
+    <testcase classname="測試環境驗證 錯誤處理驗證 應該正確處理異步錯誤" name="測試環境驗證 錯誤處理驗證 應該正確處理異步錯誤" time="0">
     </testcase>
-    <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock API 回應" name="測試環境驗證 測試工具函數驗證 應該能創建 mock API 回應" time="0">
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock API 回應" name="測試環境驗證 測試工具函數驗證 應該能創建 mock API 回應" time="0.001">
     </testcase>
-    <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock 執行記錄" name="測試環境驗證 測試工具函數驗證 應該能創建 mock 執行記錄" time="0.001">
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock 執行記錄" name="測試環境驗證 測試工具函數驗證 應該能創建 mock 執行記錄" time="0">
     </testcase>
     <testcase classname="測試環境驗證 測試工具函數驗證 應該能創建 mock 配置" name="測試環境驗證 測試工具函數驗證 應該能創建 mock 配置" time="0">
     </testcase>
     <testcase classname="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 回應" name="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 回應" time="0">
     </testcase>
-    <testcase classname="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 錯誤" name="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 錯誤" time="0">
+    <testcase classname="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 錯誤" name="測試環境驗證 測試工具函數驗證 應該能模擬 fetch 錯誤" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="@testing-library/jest-dom 相容性測試" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:23:43" time="0.879" tests="18">
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeInTheDocument - 驗證元素存在於 DOM 中" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeInTheDocument - 驗證元素存在於 DOM 中" time="0.113">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveTextContent - 驗證元素文字內容" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveTextContent - 驗證元素文字內容" time="0.003">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveValue - 驗證表單元素值" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveValue - 驗證表單元素值" time="0.004">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeDisabled/toBeEnabled - 驗證元素啟用狀態" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeDisabled/toBeEnabled - 驗證元素啟用狀態" time="0.005">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeVisible/toBeInTheDocument - 驗證元素可見性" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeVisible/toBeInTheDocument - 驗證元素可見性" time="0.034">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeChecked - 驗證複選框狀態" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toBeChecked - 驗證複選框狀態" time="0.004">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveAttribute - 驗證元素屬性" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveAttribute - 驗證元素屬性" time="0.003">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveClass - 驗證 CSS 類別" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveClass - 驗證 CSS 類別" time="0.002">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveStyle - 驗證內聯樣式" name="@testing-library/jest-dom 相容性測試 基本 DOM 匹配器 toHaveStyle - 驗證內聯樣式" time="0.005">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeRequired - 驗證必填欄位" name="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeRequired - 驗證必填欄位" time="0.002">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeInvalid/toBeValid - 驗證表單驗證狀態" name="@testing-library/jest-dom 相容性測試 表單相關匹配器 toBeInvalid/toBeValid - 驗證表單驗證狀態" time="0.002">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleName - 驗證可訪問名稱" name="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleName - 驗證可訪問名稱" time="0.011">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleDescription - 驗證可訪問描述" name="@testing-library/jest-dom 相容性測試 可訪問性相關匹配器 toHaveAccessibleDescription - 驗證可訪問描述" time="0.055">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toBeWithinRange - 自定義數值範圍匹配器" name="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toBeWithinRange - 自定義數值範圍匹配器" time="0">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toHaveBeenCalledWithObjectContaining - 自定義物件匹配器" name="@testing-library/jest-dom 相容性測試 自定義匹配器測試 toHaveBeenCalledWithObjectContaining - 自定義物件匹配器" time="0">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的新 JSX 轉換" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的新 JSX 轉換" time="0.003">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的 key 屬性" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的 key 屬性" time="0.003">
+    </testcase>
+    <testcase classname="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的事件處理" name="@testing-library/jest-dom 相容性測試 React 19 特定功能測試 應該正確處理 React 19 的事件處理" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="PTT-Telegram 整合測試" errors="0" failures="10" skipped="0" timestamp="2025-08-26T11:23:43" time="1.156" tests="10">
+    <testcase classname="PTT-Telegram 整合測試 PTT 爬取整合 應該成功爬取 PTT 文章並解析內容" name="PTT-Telegram 整合測試 PTT 爬取整合 應該成功爬取 PTT 文章並解析內容" time="0.627">
+      <failure>Error: Cannot find module &apos;request&apos; from &apos;node_modules/request-promise/lib/rp.js&apos;
+
+Require stack:
+  node_modules/request-promise/lib/rp.js
+  node_modules/cloudscraper/index.js
+
+    at Resolver._throwModNotFoundError (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:427:11)
+    at Resolver.resolveModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:358:10)
+    at Resolver._getVirtualMockPath (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:619:14)
+    at Resolver._getAbsolutePath (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:587:14)
+    at Resolver.getModuleID (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:530:31)
+    at Runtime._shouldMockCjs (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1713:37)
+    at Runtime.requireModuleOrMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1045:16)
+    at /Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/request-promise/lib/rp.js:11:16
+    at Object.&lt;anonymous&gt;.module.exports (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/stealthy-require/lib/index.js:62:23)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/request-promise/lib/rp.js:10:19)
+    at Runtime._execModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:882:12)
+    at Runtime.requireModuleOrMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1048:21)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/cloudscraper/index.js:3:23)
+    at Runtime._execModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:882:12)
+    at Runtime._generateMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1690:34)
+    at Runtime.requireMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:996:39)
+    at Runtime.requireModuleOrMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1046:21)
+    at Object.require (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:49:26)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 PTT 爬取整合 應該處理 PTT 18+ 年齡驗證頁面" name="PTT-Telegram 整合測試 PTT 爬取整合 應該處理 PTT 18+ 年齡驗證頁面" time="0.038">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 PTT 爬取整合 應該處理 PTT 連接錯誤和重試" name="PTT-Telegram 整合測試 PTT 爬取整合 應該處理 PTT 連接錯誤和重試" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 Telegram 整合 應該成功發送文章到 Telegram" name="PTT-Telegram 整合測試 Telegram 整合 應該成功發送文章到 Telegram" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 Telegram 整合 應該處理 Telegram API 錯誤" name="PTT-Telegram 整合測試 Telegram 整合 應該處理 Telegram API 錯誤" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 Telegram 整合 應該處理長訊息分割" name="PTT-Telegram 整合測試 Telegram 整合 應該處理長訊息分割" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 資料庫整合 應該正確儲存執行結果到 Firestore" name="PTT-Telegram 整合測試 資料庫整合 應該正確儲存執行結果到 Firestore" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 資料庫整合 應該正確更新配置的最後執行狀態" name="PTT-Telegram 整合測試 資料庫整合 應該正確更新配置的最後執行狀態" time="0.001">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 資料庫整合 應該處理 Firestore 連接錯誤" name="PTT-Telegram 整合測試 資料庫整合 應該處理 Firestore 連接錯誤" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="PTT-Telegram 整合測試 完整整合流程 應該執行完整的爬取-發送-儲存流程" name="PTT-Telegram 整合測試 完整整合流程 應該執行完整的爬取-發送-儲存流程" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/integration/ptt-telegram-integration.test.ts:50:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="效能測試" errors="0" failures="6" skipped="0" timestamp="2025-08-26T11:23:43" time="1.185" tests="6">
+    <testcase classname="效能測試 並發執行效能測試 應該能夠處理 10 個並發配置執行" name="效能測試 並發執行效能測試 應該能夠處理 10 個並發配置執行" time="0.711">
+      <failure>Error: Cannot find module &apos;request&apos; from &apos;node_modules/request-promise/lib/rp.js&apos;
+
+Require stack:
+  node_modules/request-promise/lib/rp.js
+  node_modules/cloudscraper/index.js
+
+    at Resolver._throwModNotFoundError (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:427:11)
+    at Resolver.resolveModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:358:10)
+    at Resolver._getVirtualMockPath (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:619:14)
+    at Resolver._getAbsolutePath (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:587:14)
+    at Resolver.getModuleID (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-resolve/build/resolver.js:530:31)
+    at Runtime._shouldMockCjs (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1713:37)
+    at Runtime.requireModuleOrMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1045:16)
+    at /Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/request-promise/lib/rp.js:11:16
+    at Object.&lt;anonymous&gt;.module.exports (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/stealthy-require/lib/index.js:62:23)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/request-promise/lib/rp.js:10:19)
+    at Runtime._execModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:882:12)
+    at Runtime.requireModuleOrMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1048:21)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/cloudscraper/index.js:3:23)
+    at Runtime._execModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1439:24)
+    at Runtime._loadModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1022:12)
+    at Runtime.requireModule (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:882:12)
+    at Runtime._generateMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1690:34)
+    at Runtime.requireMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:996:39)
+    at Runtime.requireModuleOrMock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runtime/build/index.js:1046:21)
+    at Object.require (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/performance/concurrent-execution.test.ts:51:26)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="效能測試 並發執行效能測試 應該能夠處理 50 個並發配置執行" name="效能測試 並發執行效能測試 應該能夠處理 50 個並發配置執行" time="0.033">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/performance/concurrent-execution.test.ts:52:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="效能測試 並發執行效能測試 應該在部分失敗時保持整體效能" name="效能測試 並發執行效能測試 應該在部分失敗時保持整體效能" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/performance/concurrent-execution.test.ts:52:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="效能測試 記憶體使用效能測試 應該在大量資料處理時保持合理的記憶體使用" name="效能測試 記憶體使用效能測試 應該在大量資料處理時保持合理的記憶體使用" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/performance/concurrent-execution.test.ts:52:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="效能測試 API 回應時間效能測試 應該在合理時間內回應執行歷史查詢" name="效能測試 API 回應時間效能測試 應該在合理時間內回應執行歷史查詢" time="0.001">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/performance/concurrent-execution.test.ts:52:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="效能測試 API 回應時間效能測試 應該高效處理複雜篩選查詢" name="效能測試 API 回應時間效能測試 應該高效處理複雜篩選查詢" time="0">
+      <failure>TypeError: cloudscraper.mockImplementation is not a function
+    at Object.mockImplementation (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/__tests__/performance/concurrent-execution.test.ts:52:18)
+    at Promise.then.completed (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusHook (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:281:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:246:5)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/runTest.js:444:34)
+    at Object.worker (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/jest-runner/build/testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Dashboard" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:23:43" time="1.305" tests="16">
+    <testcase classname="Dashboard Loading State should show loading skeleton when isLoading is true" name="Dashboard Loading State should show loading skeleton when isLoading is true" time="0.049">
+    </testcase>
+    <testcase classname="Dashboard Stats Display should display all stats correctly" name="Dashboard Stats Display should display all stats correctly" time="0.118">
+    </testcase>
+    <testcase classname="Dashboard Stats Display should calculate success rate correctly" name="Dashboard Stats Display should calculate success rate correctly" time="0.009">
+    </testcase>
+    <testcase classname="Dashboard Stats Display should display correct stat labels" name="Dashboard Stats Display should display correct stat labels" time="0.007">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should display recent executions correctly" name="Dashboard Recent Executions should display recent executions correctly" time="0.027">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should format execution time correctly" name="Dashboard Recent Executions should format execution time correctly" time="0.024">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should show execution duration when available" name="Dashboard Recent Executions should show execution duration when available" time="0.008">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should show empty state when no executions" name="Dashboard Recent Executions should show empty state when no executions" time="0.004">
+    </testcase>
+    <testcase classname="Dashboard Recent Executions should handle unknown configuration names" name="Dashboard Recent Executions should handle unknown configuration names" time="0.005">
+    </testcase>
+    <testcase classname="Dashboard Header and Refresh should display dashboard title and last updated time" name="Dashboard Header and Refresh should display dashboard title and last updated time" time="0.004">
+    </testcase>
+    <testcase classname="Dashboard Header and Refresh should show refresh button when onRefresh is provided" name="Dashboard Header and Refresh should show refresh button when onRefresh is provided" time="0.038">
+    </testcase>
+    <testcase classname="Dashboard Header and Refresh should not show refresh button when onRefresh is not provided" name="Dashboard Header and Refresh should not show refresh button when onRefresh is not provided" time="0.004">
+    </testcase>
+    <testcase classname="Dashboard Quick Actions should display quick actions section" name="Dashboard Quick Actions should display quick actions section" time="0.007">
+    </testcase>
+    <testcase classname="Dashboard Quick Actions should display quick action descriptions" name="Dashboard Quick Actions should display quick action descriptions" time="0.01">
+    </testcase>
+    <testcase classname="Dashboard Status Colors should apply correct colors for different statuses" name="Dashboard Status Colors should apply correct colors for different statuses" time="0.019">
+    </testcase>
+    <testcase classname="Dashboard Execution Count Display should show correct execution count in header" name="Dashboard Execution Count Display should show correct execution count in header" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="ConfigurationList" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:23:43" time="1.325" tests="14">
+    <testcase classname="ConfigurationList Loading State should show loading skeleton when isLoading is true" name="ConfigurationList Loading State should show loading skeleton when isLoading is true" time="0.035">
+    </testcase>
+    <testcase classname="ConfigurationList Empty State should show empty state when no configurations" name="ConfigurationList Empty State should show empty state when no configurations" time="0.008">
+    </testcase>
+    <testcase classname="ConfigurationList Configuration Display should display configurations correctly" name="ConfigurationList Configuration Display should display configurations correctly" time="0.078">
+    </testcase>
+    <testcase classname="ConfigurationList Configuration Display should show active/inactive status correctly" name="ConfigurationList Configuration Display should show active/inactive status correctly" time="0.067">
+    </testcase>
+    <testcase classname="ConfigurationList Configuration Display should display schedule types correctly" name="ConfigurationList Configuration Display should display schedule types correctly" time="0.014">
+    </testcase>
+    <testcase classname="ConfigurationList Configuration Display should format last executed time correctly" name="ConfigurationList Configuration Display should format last executed time correctly" time="0.006">
+    </testcase>
+    <testcase classname="ConfigurationList Actions should call onEdit when edit button is clicked" name="ConfigurationList Actions should call onEdit when edit button is clicked" time="0.021">
+    </testcase>
+    <testcase classname="ConfigurationList Actions should call onDelete when delete is confirmed" name="ConfigurationList Actions should call onDelete when delete is confirmed" time="0.013">
+    </testcase>
+    <testcase classname="ConfigurationList Actions should not call onDelete when delete is cancelled" name="ConfigurationList Actions should not call onDelete when delete is cancelled" time="0.009">
+    </testcase>
+    <testcase classname="ConfigurationList Actions should show loading state during delete" name="ConfigurationList Actions should show loading state during delete" time="0.041">
+    </testcase>
+    <testcase classname="ConfigurationList Actions should call onToggleActive when enable/disable button is clicked" name="ConfigurationList Actions should call onToggleActive when enable/disable button is clicked" time="0.019">
+    </testcase>
+    <testcase classname="ConfigurationList Actions should show loading state during toggle" name="ConfigurationList Actions should show loading state during toggle" time="0.027">
+    </testcase>
+    <testcase classname="ConfigurationList Status Badges should display correct status badges" name="ConfigurationList Status Badges should display correct status badges" time="0.009">
+    </testcase>
+    <testcase classname="ConfigurationList Configuration Count should show correct active/total count" name="ConfigurationList Configuration Count should show correct active/total count" time="0.013">
+    </testcase>
+  </testsuite>
+  <testsuite name="SecretManagerStatus" errors="0" failures="3" skipped="0" timestamp="2025-08-26T11:23:43" time="1.456" tests="14">
+    <testcase classname="SecretManagerStatus 應該顯示載入狀態" name="SecretManagerStatus 應該顯示載入狀態" time="0.069">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該顯示成功狀態" name="SecretManagerStatus 應該顯示成功狀態" time="0.096">
+      <failure>Error: expect(received).toBeInTheDocument()
+
+received value must be an HTMLElement or an SVGElement.
+Received has value: null
+    at __EXTERNAL_MATCHER_TRAP__ (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/expect/build/index.js:325:30)
+    at Object.throwingMatcher [as toBeInTheDocument] (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/expect/build/index.js:326:15)
+    at Object.toBeInTheDocument (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/components/__tests__/SecretManagerStatus.test.tsx:49:25)</failure>
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該顯示無法存取的錯誤狀態" name="SecretManagerStatus 應該顯示無法存取的錯誤狀態" time="0.026">
+      <failure>Error: expect(received).toBeInTheDocument()
+
+received value must be an HTMLElement or an SVGElement.
+Received has value: null
+    at __EXTERNAL_MATCHER_TRAP__ (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/expect/build/index.js:325:30)
+    at Object.throwingMatcher [as toBeInTheDocument] (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/expect/build/index.js:326:15)
+    at Object.toBeInTheDocument (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/components/__tests__/SecretManagerStatus.test.tsx:73:23)</failure>
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該顯示 Token 格式無效的警告狀態" name="SecretManagerStatus 應該顯示 Token 格式無效的警告狀態" time="0.031">
+      <failure>Error: expect(received).toBeInTheDocument()
+
+received value must be an HTMLElement or an SVGElement.
+Received has value: null
+    at __EXTERNAL_MATCHER_TRAP__ (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/expect/build/index.js:325:30)
+    at Object.throwingMatcher [as toBeInTheDocument] (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/node_modules/expect/build/index.js:326:15)
+    at Object.toBeInTheDocument (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/components/__tests__/SecretManagerStatus.test.tsx:99:25)</failure>
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該顯示詳細資訊" name="SecretManagerStatus 應該顯示詳細資訊" time="0.032">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該處理網路錯誤" name="SecretManagerStatus 應該處理網路錯誤" time="0.008">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該處理 API 錯誤回應" name="SecretManagerStatus 應該處理 API 錯誤回應" time="0.009">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該支援重新驗證功能" name="SecretManagerStatus 應該支援重新驗證功能" time="0.043">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該呼叫 onStatusChange 回調" name="SecretManagerStatus 應該呼叫 onStatusChange 回調" time="0.005">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該在錯誤時呼叫 onStatusChange 為 false" name="SecretManagerStatus 應該在錯誤時呼叫 onStatusChange 為 false" time="0.008">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該顯示設定建議" name="SecretManagerStatus 應該顯示設定建議" time="0.008">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該顯示 Token 格式錯誤的建議" name="SecretManagerStatus 應該顯示 Token 格式錯誤的建議" time="0.009">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該顯示錯誤詳情" name="SecretManagerStatus 應該顯示錯誤詳情" time="0.006">
+    </testcase>
+    <testcase classname="SecretManagerStatus 應該套用自訂 className" name="SecretManagerStatus 應該套用自訂 className" time="0.011">
+    </testcase>
+  </testsuite>
+  <testsuite name="ConfigurationForm" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:23:43" time="1.47" tests="17">
+    <testcase classname="ConfigurationForm Create Mode should render create form with default values" name="ConfigurationForm Create Mode should render create form with default values" time="0.086">
+    </testcase>
+    <testcase classname="ConfigurationForm Create Mode should show daily time input when daily schedule is selected" name="ConfigurationForm Create Mode should show daily time input when daily schedule is selected" time="0.012">
+    </testcase>
+    <testcase classname="ConfigurationForm Create Mode should show interval input when custom schedule is selected" name="ConfigurationForm Create Mode should show interval input when custom schedule is selected" time="0.011">
+    </testcase>
+    <testcase classname="ConfigurationForm Create Mode should hide both time inputs when hourly schedule is selected" name="ConfigurationForm Create Mode should hide both time inputs when hourly schedule is selected" time="0.032">
+    </testcase>
+    <testcase classname="ConfigurationForm Create Mode should not show active checkbox in create mode" name="ConfigurationForm Create Mode should not show active checkbox in create mode" time="0.017">
+    </testcase>
+    <testcase classname="ConfigurationForm Edit Mode should render edit form with initial data" name="ConfigurationForm Edit Mode should render edit form with initial data" time="0.011">
+    </testcase>
+    <testcase classname="ConfigurationForm Edit Mode should show active checkbox in edit mode" name="ConfigurationForm Edit Mode should show active checkbox in edit mode" time="0.004">
+    </testcase>
+    <testcase classname="ConfigurationForm Edit Mode should update form when initialData changes" name="ConfigurationForm Edit Mode should update form when initialData changes" time="0.03">
+    </testcase>
+    <testcase classname="ConfigurationForm Form Validation should display validation errors" name="ConfigurationForm Form Validation should display validation errors" time="0.015">
+    </testcase>
+    <testcase classname="ConfigurationForm Form Validation should clear field errors when user starts typing" name="ConfigurationForm Form Validation should clear field errors when user starts typing" time="0.02">
+    </testcase>
+    <testcase classname="ConfigurationForm Form Submission should submit valid form data in create mode" name="ConfigurationForm Form Submission should submit valid form data in create mode" time="0.034">
+    </testcase>
+    <testcase classname="ConfigurationForm Form Submission should submit valid form data in edit mode with isActive" name="ConfigurationForm Form Submission should submit valid form data in edit mode with isActive" time="0.017">
+    </testcase>
+    <testcase classname="ConfigurationForm Form Submission should handle custom schedule submission" name="ConfigurationForm Form Submission should handle custom schedule submission" time="0.027">
+    </testcase>
+    <testcase classname="ConfigurationForm Form Submission should show loading state during submission" name="ConfigurationForm Form Submission should show loading state during submission" time="0.052">
+    </testcase>
+    <testcase classname="ConfigurationForm Form Submission should display submit error" name="ConfigurationForm Form Submission should display submit error" time="0.028">
+    </testcase>
+    <testcase classname="ConfigurationForm Accessibility should have proper labels and ARIA attributes" name="ConfigurationForm Accessibility should have proper labels and ARIA attributes" time="0.004">
+    </testcase>
+    <testcase classname="ConfigurationForm Accessibility should disable form elements when loading" name="ConfigurationForm Accessibility should disable form elements when loading" time="0.011">
+    </testcase>
+  </testsuite>
+  <testsuite name="Telegram Bot Integration" errors="0" failures="0" skipped="0" timestamp="2025-08-26T11:23:43" time="2.996" tests="26">
+    <testcase classname="Telegram Bot Integration formatArticleForTelegram 應該正確格式化單篇文章" name="Telegram Bot Integration formatArticleForTelegram 應該正確格式化單篇文章" time="0.003">
+    </testcase>
+    <testcase classname="Telegram Bot Integration formatArticlesForTelegram 應該正確格式化多篇文章" name="Telegram Bot Integration formatArticlesForTelegram 應該正確格式化多篇文章" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration formatArticlesForTelegram 應該處理空文章陣列" name="Telegram Bot Integration formatArticlesForTelegram 應該處理空文章陣列" time="0.001">
+    </testcase>
+    <testcase classname="Telegram Bot Integration splitLongMessage 應該保持短訊息不變" name="Telegram Bot Integration splitLongMessage 應該保持短訊息不變" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration splitLongMessage 應該分割長訊息" name="Telegram Bot Integration splitLongMessage 應該分割長訊息" time="0.001">
+    </testcase>
+    <testcase classname="Telegram Bot Integration splitLongMessage 應該按行分割訊息" name="Telegram Bot Integration splitLongMessage 應該按行分割訊息" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration groupArticlesForMessages 應該將文章分組為適當大小的訊息" name="Telegram Bot Integration groupArticlesForMessages 應該將文章分組為適當大小的訊息" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration groupArticlesForMessages 應該處理空文章陣列" name="Telegram Bot Integration groupArticlesForMessages 應該處理空文章陣列" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendMessage 應該成功發送訊息" name="Telegram Bot Integration TelegramBotClient sendMessage 應該成功發送訊息" time="0.032">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendMessage 應該處理無效聊天 ID 錯誤" name="Telegram Bot Integration TelegramBotClient sendMessage 應該處理無效聊天 ID 錯誤" time="0.007">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendMessage 應該處理 Bot 被封鎖錯誤" name="Telegram Bot Integration TelegramBotClient sendMessage 應該處理 Bot 被封鎖錯誤" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendMessage 應該處理速率限制" name="Telegram Bot Integration TelegramBotClient sendMessage 應該處理速率限制" time="1.003">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendMessage 應該在網路錯誤時重試" name="Telegram Bot Integration TelegramBotClient sendMessage 應該在網路錯誤時重試" time="0.03">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendMessage 應該在達到最大重試次數後失敗" name="Telegram Bot Integration TelegramBotClient sendMessage 應該在達到最大重試次數後失敗" time="0.084">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該成功發送文章批次" name="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該成功發送文章批次" time="0.003">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該處理空聊天 ID" name="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該處理空聊天 ID" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該處理空文章陣列" name="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該處理空文章陣列" time="0.001">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該分割大量文章為多則訊息" name="Telegram Bot Integration TelegramBotClient sendArticleBatch 應該分割大量文章為多則訊息" time="1.004">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient testConnection 應該在連接成功時返回 true" name="Telegram Bot Integration TelegramBotClient testConnection 應該在連接成功時返回 true" time="0.001">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient testConnection 應該在連接失敗時返回 false" name="Telegram Bot Integration TelegramBotClient testConnection 應該在連接失敗時返回 false" time="0.07">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient getBotInfo 應該返回 Bot 資訊" name="Telegram Bot Integration TelegramBotClient getBotInfo 應該返回 Bot 資訊" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotClient getBotInfo 應該處理取得 Bot 資訊失敗" name="Telegram Bot Integration TelegramBotClient getBotInfo 應該處理取得 Bot 資訊失敗" time="0.001">
+    </testcase>
+    <testcase classname="Telegram Bot Integration 便利函數 sendArticlesToTelegram 應該建立 Bot 實例並發送文章" name="Telegram Bot Integration 便利函數 sendArticlesToTelegram 應該建立 Bot 實例並發送文章" time="0.003">
+    </testcase>
+    <testcase classname="Telegram Bot Integration 便利函數 testTelegramBot 應該測試 Bot 連接" name="Telegram Bot Integration 便利函數 testTelegramBot 應該測試 Bot 連接" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotError 應該建立具有正確屬性的錯誤" name="Telegram Bot Integration TelegramBotError 應該建立具有正確屬性的錯誤" time="0">
+    </testcase>
+    <testcase classname="Telegram Bot Integration TelegramBotError 應該預設 retryable 為 true" name="Telegram Bot Integration TelegramBotError 應該預設 retryable 為 true" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="Firestore Configuration Operations" errors="0" failures="8" skipped="0" timestamp="2025-08-26T11:23:43" time="32.26" tests="9">
+    <testcase classname="Firestore Configuration Operations createConfiguration should create a new configuration successfully" name="Firestore Configuration Operations createConfiguration should create a new configuration successfully" time="0.51">
+      <failure>Error: Failed to create configuration
+    at createConfiguration (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:126:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:100:22)</failure>
+    </testcase>
+    <testcase classname="Firestore Configuration Operations createConfiguration should throw error when creation fails" name="Firestore Configuration Operations createConfiguration should throw error when creation fails" time="0.008">
+    </testcase>
+    <testcase classname="Firestore Configuration Operations getAllConfigurations should return all configurations" name="Firestore Configuration Operations getAllConfigurations should return all configurations" time="8.607">
+      <failure>Error: Failed to get configurations
+    at getAllConfigurations (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:153:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:131:22)</failure>
+    </testcase>
+    <testcase classname="Firestore Configuration Operations getActiveConfigurations should return only active configurations" name="Firestore Configuration Operations getActiveConfigurations should return only active configurations" time="6.846">
+      <failure>Error: Failed to get active configurations
+    at getActiveConfigurations (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:182:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:149:22)</failure>
+    </testcase>
+    <testcase classname="Firestore Configuration Operations updateConfiguration should update configuration successfully" name="Firestore Configuration Operations updateConfiguration should update configuration successfully" time="0.007">
+      <failure>Error: Failed to update configuration
+    at updateConfiguration (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:232:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:168:22)</failure>
+    </testcase>
+    <testcase classname="Firestore Configuration Operations deleteConfiguration should delete configuration successfully" name="Firestore Configuration Operations deleteConfiguration should delete configuration successfully" time="0.004">
+      <failure>Error: Failed to delete configuration
+    at deleteConfiguration (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:246:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:182:7)</failure>
+    </testcase>
+    <testcase classname="Firestore Execution Operations createExecution should create execution record successfully" name="Firestore Execution Operations createExecution should create execution record successfully" time="0.004">
+      <failure>Error: Failed to create execution record
+    at createExecution (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:315:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:211:22)</failure>
+    </testcase>
+    <testcase classname="Firestore Execution Operations getExecutionHistory should return execution history for configuration" name="Firestore Execution Operations getExecutionHistory should return execution history for configuration" time="7.73">
+      <failure>Error: Failed to get execution history
+    at getExecutionHistory (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:347:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:236:22)</failure>
+    </testcase>
+    <testcase classname="Firestore Execution Operations getExecutionStats should return execution statistics" name="Firestore Execution Operations getExecutionStats should return execution statistics" time="7.686">
+      <failure>Error: Failed to get execution statistics
+    at getExecutionStats (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/firestore.ts:433:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at Object.&lt;anonymous&gt; (/Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/src/lib/__tests__/firestore.test.ts:257:22)</failure>
     </testcase>
   </testsuite>
 </testsuites>

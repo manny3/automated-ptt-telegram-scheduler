@@ -71,7 +71,7 @@ const customJestConfig = {
   
   // Transform ignore patterns
   transformIgnorePatterns: [
-    '/node_modules/(?!(cheerio|@testing-library|uuid|eventid)/)',
+    '/node_modules/(?!(cheerio|@testing-library|uuid|eventid|@google-cloud)/)',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
   
