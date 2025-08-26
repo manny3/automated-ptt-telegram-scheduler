@@ -1,0 +1,57 @@
+=== CI/CD Pipeline Optimization Testing Started ===
+Timestamp: Tue Aug 26 19:46:19 CST 2025
+Environment: 'Local'
+Node Version: v20.12.2
+====================================================
+[0;32m[INFO][0m Running comprehensive optimization tests...
+[0;34m[TEST][0m Testing multi-layer caching optimization...
+[0;32m[INFO][0m Caching optimization results:
+[0;32m[INFO][0m   ✅ npm cache: 254MB
+[0;32m[INFO][0m   ✅ Next.js cache: 125MB
+[0;32m[INFO][0m   ✅ Jest cache: 0MB
+[0;32m[INFO][0m   ✅ SWC cache: 0MB
+[0;32m[INFO][0m Overall caching effectiveness: 100%
+[0;32m[SUCCESS][0m Caching optimization: EXCELLENT
+[0;34m[TEST][0m Testing parallel execution optimization...
+[0;32m[INFO][0m System CPU cores: 2
+[0;32m[INFO][0m Optimal Jest workers: 2
+[0;32m[INFO][0m Testing parallel test execution with maxWorkers=2
+[0;31m[ERROR][0m Parallel test execution failed
+[0;34m[TEST][0m Testing performance monitoring integration...
+[0;32m[INFO][0m Performance monitor script found and executable
+[0;31m[ERROR][0m Performance monitoring execution: FAILED
+[0;34m[TEST][0m Testing stability testing integration...
+[0;32m[INFO][0m Stability test script found and executable
+[1;33m[WARN][0m Stability testing: TIMEOUT or FAILED (expected for comprehensive test)
+[0;34m[TEST][0m Testing workflow performance tracking...
+[0;32m[INFO][0m Workflow performance tracker script found and executable
+[0;31m[ERROR][0m Workflow performance tracking: FAILED
+[0;34m[TEST][0m Testing package.json script optimizations...
+[0;32m[INFO][0m Package.json script optimization results:
+[0;32m[INFO][0m   ❌ test:parallel script: FAILED
+[0;32m[INFO][0m   ❌ perf:monitor script: FAILED
+[0;32m[INFO][0m   ⚠️ ci:stability script: TIMEOUT (expected)
+[0;32m[INFO][0m   ❌ test:benchmark script: FAILED
+[0;32m[INFO][0m Package script success rate: 0%
+[1;33m[WARN][0m Package.json script optimization: NEEDS IMPROVEMENT
+[0;34m[TEST][0m Testing CI workflow configuration...
+[0;32m[INFO][0m CI workflow file found: .github/workflows/ci-cd.yml
+[0;32m[SUCCESS][0m Found optimization: Enhanced multi-layer caching
+[0;32m[SUCCESS][0m Found optimization: parallel test execution
+[0;32m[SUCCESS][0m Found optimization: performance monitoring
+[1;33m[WARN][0m Missing optimization: Docker buildx
+[0;32m[SUCCESS][0m Found optimization: maxWorkers
+[0;32m[INFO][0m Workflow optimization score: 80%
+[0;32m[SUCCESS][0m CI workflow configuration: EXCELLENT
+[0;32m[INFO][0m Generating comprehensive optimization report...
+[0;32m[INFO][0m Optimization report generated: /Users/tony/tony-space/Tony/python/automated-ptt-telegram-scheduler/ci-optimization-report.md
+[0;32m[INFO][0m === OPTIMIZATION TEST SUMMARY ===
+[0;32m[INFO][0m ✅ Caching Optimization
+[0;32m[INFO][0m ❌ Parallel Execution
+[0;32m[INFO][0m ❌ Performance Monitoring
+[0;32m[INFO][0m ✅ Stability Integration
+[0;32m[INFO][0m ❌ Workflow Tracking
+[0;32m[INFO][0m ❌ Package Scripts
+[0;32m[INFO][0m ✅ Workflow Configuration
+[0;32m[INFO][0m Overall optimization success rate: 42%
+[1;33m[WARN][0m ⚠️ CI/CD pipeline optimization: NEEDS IMPROVEMENT

@@ -1,0 +1,10 @@
+{
+  "workflow_runs": [],
+  "performance_trends": {
+    "avg_duration": 0,
+    "avg_test_duration": 0,
+    "avg_build_duration": 0,
+    "cache_hit_rate": 0
+  },
+  "last_updated": "2025-08-26T11:46:20Z"
+}

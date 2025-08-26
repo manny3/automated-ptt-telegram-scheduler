@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-08-26T11:47:55Z",
+  "workflow": "'Local'",
+  "run_id": "'N/A'",
+  "node_version": "'Unknown'",
+  "system": {
+    "cpu_cores": 0,
+    "memory_total_mb": 0,
+    "memory_available_mb": 0,
+    "disk_available_gb": 0
+  },
+  "cache": {
+    "effectiveness_score": 0,
+    "npm_cache_mb": 0,
+    "node_modules_mb": 0
+  },
+  "tests": {
+    "optimal_workers": 2,
+    "total_files": 0
+  },
+  "build": {
+    "complexity": "'unknown'",
+    "source_files": 0
+  },
+  "durations": {
+    "dependency_analysis_s": 0,
+    "test_execution_s": 0,
+    "build_duration_s": 0,
+    "total_workflow_s": 0
+  }
+}

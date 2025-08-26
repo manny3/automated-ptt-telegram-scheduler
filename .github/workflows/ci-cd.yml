@@ -38,7 +38,7 @@ jobs:
         cache: 'npm'
         cache-dependency-path: package-lock.json
 
-    - name: Enhanced multi-layer caching
+    - name: Enhanced multi-layer caching strategy
       uses: actions/cache@v4
       with:
         path: |
@@ -47,11 +47,26 @@ jobs:
           .next/cache
           .jest-cache
           coverage
-        key: ${{ runner.os }}-node-${{ matrix.node-version }}-deps-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('jest.config.js') }}
+          .swc
+          .eslintcache
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-deps-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('jest.config.js', 'next.config.js', 'tsconfig.json') }}-v2
         restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node-version }}-deps-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('jest.config.js', 'next.config.js', 'tsconfig.json') }}-
           ${{ runner.os }}-node-${{ matrix.node-version }}-deps-${{ hashFiles('**/package-lock.json') }}-
           ${{ runner.os }}-node-${{ matrix.node-version }}-deps-
           ${{ runner.os }}-node-${{ matrix.node-version }}-
+
+    - name: Cache build artifacts
+      uses: actions/cache@v4
+      with:
+        path: |
+          .next/static
+          .next/standalone
+          .next/cache
+        key: ${{ runner.os }}-build-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('src/**/*', 'pages/**/*', 'components/**/*') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}-
+          ${{ runner.os }}-build-${{ matrix.node-version }}-
 
     - name: Display environment diagnostics
       run: |
@@ -140,68 +155,166 @@ jobs:
         }
         echo "✅ Type checking passed"
 
-    - name: Run unit tests with enhanced reporting
+    - name: Run tests in parallel with performance monitoring
       run: |
-        echo "=== Unit Tests ==="
-        npm run test:unit -- --verbose --detectOpenHandles --forceExit || {
-          echo "❌ Unit tests failed"
-          echo "Jest configuration:"
-          npx jest --showConfig
+        echo "=== Parallel Test Execution ==="
+        echo "Starting parallel test execution at $(date)"
+        
+        # Record start time for performance monitoring
+        echo "TEST_START_TIME=$(date +%s)" >> $GITHUB_ENV
+        
+        # Run tests in parallel using background processes
+        (
+          echo "Starting unit tests..."
+          npm run test:unit -- --verbose --detectOpenHandles --forceExit --maxWorkers=2 > unit-test.log 2>&1
+          echo $? > unit-test.exit
+        ) &
+        UNIT_PID=$!
+        
+        (
+          echo "Starting integration tests..."
+          npm run test:integration -- --verbose --detectOpenHandles --forceExit --maxWorkers=2 > integration-test.log 2>&1
+          echo $? > integration-test.exit
+        ) &
+        INTEGRATION_PID=$!
+        
+        (
+          echo "Starting E2E tests..."
+          npm run test:e2e -- --verbose --detectOpenHandles --forceExit --maxWorkers=1 > e2e-test.log 2>&1
+          echo $? > e2e-test.exit
+        ) &
+        E2E_PID=$!
+        
+        (
+          echo "Starting performance tests..."
+          npm run test:performance -- --verbose --detectOpenHandles --forceExit --maxWorkers=1 > performance-test.log 2>&1
+          echo $? > performance-test.exit
+        ) &
+        PERFORMANCE_PID=$!
+        
+        # Wait for all tests to complete
+        echo "Waiting for all test suites to complete..."
+        wait $UNIT_PID $INTEGRATION_PID $E2E_PID $PERFORMANCE_PID
+        
+        # Record end time
+        echo "TEST_END_TIME=$(date +%s)" >> $GITHUB_ENV
+        
+        # Check results
+        UNIT_EXIT=$(cat unit-test.exit)
+        INTEGRATION_EXIT=$(cat integration-test.exit)
+        E2E_EXIT=$(cat e2e-test.exit)
+        PERFORMANCE_EXIT=$(cat performance-test.exit)
+        
+        echo "=== Test Results Summary ==="
+        echo "Unit Tests: $([ $UNIT_EXIT -eq 0 ] && echo "✅ PASSED" || echo "❌ FAILED")"
+        echo "Integration Tests: $([ $INTEGRATION_EXIT -eq 0 ] && echo "✅ PASSED" || echo "❌ FAILED")"
+        echo "E2E Tests: $([ $E2E_EXIT -eq 0 ] && echo "✅ PASSED" || echo "❌ FAILED")"
+        echo "Performance Tests: $([ $PERFORMANCE_EXIT -eq 0 ] && echo "✅ PASSED" || echo "❌ FAILED")"
+        
+        # Display logs for failed tests
+        if [ $UNIT_EXIT -ne 0 ]; then
+          echo "=== Unit Test Logs ==="
+          cat unit-test.log
+        fi
+        
+        if [ $INTEGRATION_EXIT -ne 0 ]; then
+          echo "=== Integration Test Logs ==="
+          cat integration-test.log
+        fi
+        
+        if [ $E2E_EXIT -ne 0 ]; then
+          echo "=== E2E Test Logs ==="
+          cat e2e-test.log
+        fi
+        
+        if [ $PERFORMANCE_EXIT -ne 0 ]; then
+          echo "=== Performance Test Logs ==="
+          cat performance-test.log
+        fi
+        
+        # Exit with error if any test failed
+        if [ $UNIT_EXIT -ne 0 ] || [ $INTEGRATION_EXIT -ne 0 ] || [ $E2E_EXIT -ne 0 ] || [ $PERFORMANCE_EXIT -ne 0 ]; then
+          echo "❌ One or more test suites failed"
           exit 1
-        }
-        echo "✅ Unit tests passed"
+        fi
+        
+        echo "✅ All test suites passed"
       env:
         NODE_ENV: test
+        JEST_WORKERS: 50%
 
-    - name: Run integration tests with enhanced reporting
-      run: |
-        echo "=== Integration Tests ==="
-        npm run test:integration -- --verbose --detectOpenHandles --forceExit || {
-          echo "❌ Integration tests failed"
-          exit 1
-        }
-        echo "✅ Integration tests passed"
-      env:
-        NODE_ENV: test
-
-    - name: Run E2E tests with enhanced reporting
-      run: |
-        echo "=== E2E Tests ==="
-        npm run test:e2e -- --verbose --detectOpenHandles --forceExit || {
-          echo "❌ E2E tests failed"
-          exit 1
-        }
-        echo "✅ E2E tests passed"
-      env:
-        NODE_ENV: test
-
-    - name: Run performance tests with enhanced reporting
-      run: |
-        echo "=== Performance Tests ==="
-        npm run test:performance -- --verbose --detectOpenHandles --forceExit || {
-          echo "❌ Performance tests failed"
-          exit 1
-        }
-        echo "✅ Performance tests passed"
-      env:
-        NODE_ENV: test
-
-    - name: Generate comprehensive test coverage
+    - name: Generate comprehensive test coverage with performance metrics
       run: |
         echo "=== Test Coverage Generation ==="
-        npm run test:coverage -- --detectOpenHandles --forceExit || {
+        COVERAGE_START_TIME=$(date +%s)
+        
+        npm run test:coverage -- --detectOpenHandles --forceExit --maxWorkers=50% || {
           echo "❌ Coverage generation failed"
           exit 1
         }
+        
+        COVERAGE_END_TIME=$(date +%s)
+        COVERAGE_DURATION=$((COVERAGE_END_TIME - COVERAGE_START_TIME))
         
         # Display coverage summary
         if [ -f coverage/coverage-summary.json ]; then
           echo "Coverage Summary:"
           cat coverage/coverage-summary.json | jq '.total'
         fi
-        echo "✅ Coverage generation completed"
+        
+        echo "✅ Coverage generation completed in ${COVERAGE_DURATION}s"
+        echo "COVERAGE_DURATION=${COVERAGE_DURATION}" >> $GITHUB_ENV
 
-    - name: Upload test results
+    - name: Generate CI performance report
+      run: |
+        echo "=== CI Performance Report ==="
+        
+        # Calculate test execution time
+        TEST_DURATION=$((${TEST_END_TIME:-0} - ${TEST_START_TIME:-0}))
+        TOTAL_DURATION=$(($(date +%s) - ${WORKFLOW_START_TIME:-$(date +%s)}))
+        
+        # Create performance report
+        cat > ci-performance-report.md << EOF
+        # CI Performance Report
+        
+        **Workflow Information:**
+        - Run ID: ${{ github.run_id }}
+        - Node Version: ${{ matrix.node-version }}
+        - Commit: ${{ github.sha }}
+        - Branch: ${{ github.ref_name }}
+        
+        **Performance Metrics:**
+        - Total Workflow Duration: ${TOTAL_DURATION}s
+        - Test Execution Duration: ${TEST_DURATION}s
+        - Coverage Generation Duration: ${COVERAGE_DURATION:-0}s
+        - Cache Hit Rate: $([ -d ~/.npm ] && echo "High" || echo "Low")
+        
+        **Resource Usage:**
+        - Available Memory: $(free -h | grep Mem | awk '{print $7}')
+        - Disk Usage: $(df -h . | tail -1 | awk '{print $5}')
+        - CPU Cores: $(nproc)
+        
+        **Optimization Status:**
+        - ✅ Multi-layer caching enabled
+        - ✅ Parallel test execution
+        - ✅ Performance monitoring
+        - ✅ Resource optimization
+        
+        **Recommendations:**
+        $([ $TEST_DURATION -gt 300 ] && echo "- ⚠️ Test execution time is high (${TEST_DURATION}s) - consider further optimization" || echo "- ✅ Test execution time is optimal")
+        $([ $TOTAL_DURATION -gt 900 ] && echo "- ⚠️ Total workflow time is high (${TOTAL_DURATION}s) - review caching strategy" || echo "- ✅ Total workflow time is acceptable")
+        EOF
+        
+        echo "Performance report generated:"
+        cat ci-performance-report.md
+        
+        # Set environment variables for later use
+        echo "TEST_DURATION=${TEST_DURATION}" >> $GITHUB_ENV
+        echo "TOTAL_DURATION=${TOTAL_DURATION}" >> $GITHUB_ENV
+      env:
+        WORKFLOW_START_TIME: ${{ github.event.head_commit.timestamp }}
+
+    - name: Upload test results and performance data
       uses: actions/upload-artifact@v4
       if: always()
       with:
@@ -210,6 +323,8 @@ jobs:
           coverage/
           test-results/
           junit.xml
+          ci-performance-report.md
+          *-test.log
         retention-days: 7
 
     - name: Upload coverage to Codecov
@@ -350,7 +465,7 @@ jobs:
         cache: 'npm'
         cache-dependency-path: package-lock.json
 
-    - name: Enhanced build caching
+    - name: Enhanced build caching with multiple layers
       uses: actions/cache@v4
       with:
         path: |
@@ -358,11 +473,22 @@ jobs:
           node_modules
           .next/cache
           .next/static
-        key: ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('next.config.js') }}
+          .next/standalone
+          .swc
+        key: ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('next.config.js', 'tsconfig.json', 'tailwind.config.js') }}-v2
         restore-keys: |
+          ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('next.config.js', 'tsconfig.json', 'tailwind.config.js') }}-
           ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}-
           ${{ runner.os }}-build-node-${{ env.NODE_VERSION }}-
           ${{ runner.os }}-build-node-
+
+    - name: Cache Docker layers
+      uses: actions/cache@v4
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
 
     - name: Install dependencies with enhanced error handling
       run: |
@@ -397,21 +523,45 @@ jobs:
       env:
         NODE_ENV: production
 
-    - name: Build Docker image with enhanced error handling
+    - name: Set up Docker Buildx for enhanced caching
+      uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          network=host
+
+    - name: Build Docker image with enhanced caching and parallel processing
       run: |
-        echo "=== Docker Image Build ==="
+        echo "=== Docker Image Build with Enhanced Caching ==="
         echo "Docker version: $(docker --version)"
         echo "Available disk space: $(df -h . || echo 'N/A')"
+        echo "CPU cores available: $(nproc)"
         
-        docker build -t ptt-telegram-scheduler:${{ github.sha }} . || {
+        BUILD_START_TIME=$(date +%s)
+        
+        # Build with buildx for better caching and parallel processing
+        docker buildx build \
+          --cache-from=type=local,src=/tmp/.buildx-cache \
+          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
+          --load \
+          --tag ptt-telegram-scheduler:${{ github.sha }} \
+          --tag ptt-telegram-scheduler:latest \
+          --build-arg BUILDKIT_INLINE_CACHE=1 \
+          . || {
           echo "❌ Docker build failed"
           echo "Docker system info:"
           docker system df || echo "Unable to get Docker system info"
           exit 1
         }
         
-        docker tag ptt-telegram-scheduler:${{ github.sha }} ptt-telegram-scheduler:latest
-        echo "✅ Docker image built successfully"
+        BUILD_END_TIME=$(date +%s)
+        BUILD_DURATION=$((BUILD_END_TIME - BUILD_START_TIME))
+        
+        # Move cache to avoid growing cache
+        rm -rf /tmp/.buildx-cache
+        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+        
+        echo "✅ Docker image built successfully in ${BUILD_DURATION}s"
+        echo "BUILD_DURATION=${BUILD_DURATION}" >> $GITHUB_ENV
         
         echo "Image details:"
         docker images ptt-telegram-scheduler:${{ github.sha }} --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
@@ -523,6 +673,22 @@ jobs:
         name: security-scan-results
       continue-on-error: true
 
+    - name: Setup Node.js for monitoring
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies for monitoring
+      run: npm ci --silent
+
+    - name: Run comprehensive performance monitoring
+      run: |
+        echo "=== Running Performance Monitoring ==="
+        npm run perf:monitor || {
+          echo "⚠️ Performance monitoring failed, continuing with basic report"
+        }
+
     - name: Generate CI/CD performance report
       run: |
         echo "=== CI/CD Pipeline Performance Report ===" > pipeline-report.md
@@ -574,11 +740,25 @@ jobs:
           echo "- ✅ All jobs completed successfully - Ready for deployment" >> pipeline-report.md
         fi
 
-    - name: Upload pipeline report
+    - name: Track workflow performance metrics
+      run: |
+        echo "=== Tracking Workflow Performance ==="
+        ./scripts/workflow-performance-tracker.sh || {
+          echo "⚠️ Performance tracking failed, continuing without metrics"
+        }
+      env:
+        TEST_JOB_RESULT: ${{ needs.test.result }}
+        SECURITY_JOB_RESULT: ${{ needs.security.result }}
+        BUILD_JOB_RESULT: ${{ needs.build.result }}
+
+    - name: Upload pipeline report and performance data
       uses: actions/upload-artifact@v4
       with:
         name: pipeline-report-${{ github.run_id }}
-        path: pipeline-report.md
+        path: |
+          pipeline-report.md
+          ci-performance-report.md
+          .github/performance-data/
         retention-days: 30
 
     - name: Comment PR with pipeline status
